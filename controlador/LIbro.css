@@ -183,71 +183,71 @@ body {
 
 /* Estados de las páginas - ANIMACIONES DE VOLTEO */
 
-/* Al seleccionar página 2: voltear portada */
+/* Asegúrate de que todas las páginas se volteen desde el borde correcto */
+.book__page--1, .book__page--3, .book__page--5 {
+    transform-origin: right center;
+}
+
+.book__page--2, .book__page--4, .book__page--6 {
+    transform-origin: left center;
+}
+
+/* Reglas de animación para cada página */
+
+/* Cuando se selecciona la página 2, voltea la portada */
 #page-2:checked ~ .book__page--1 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
 
-/* Al seleccionar página 3: mantener portada volteada, voltear página 2 */
+/* Cuando se selecciona la página 3, voltea la portada y la página 2 */
 #page-3:checked ~ .book__page--1 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
-
 #page-3:checked ~ .book__page--2 {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
-/* Al seleccionar página 4: mantener anteriores, voltear página 3 */
+/* Cuando se selecciona la página 4, voltea las 3 anteriores */
 #page-4:checked ~ .book__page--1 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
-
 #page-4:checked ~ .book__page--2 {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
-
 #page-4:checked ~ .book__page--3 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
 
-/* Al seleccionar página 5: mantener anteriores, voltear página 4 */
+/* Cuando se selecciona la página 5, voltea las 4 anteriores */
 #page-5:checked ~ .book__page--1 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
-
 #page-5:checked ~ .book__page--2 {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
-
 #page-5:checked ~ .book__page--3 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
-
 #page-5:checked ~ .book__page--4 {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
-/* Al seleccionar página 6 (contraportada): voltear todas las páginas */
+/* Cuando se selecciona la página 6 (contraportada), voltea todas las páginas anteriores */
 #page-6:checked ~ .book__page--1 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
-
 #page-6:checked ~ .book__page--2 {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
-
 #page-6:checked ~ .book__page--3 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
-
 #page-6:checked ~ .book__page--4 {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
-
 #page-6:checked ~ .book__page--5 {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
-
 /* Responsive */
 @media (max-width: 768px) {
   .cover {
@@ -271,4 +271,12 @@ body {
   .img, .img-Fondo {
     max-height: 35%;
   }
+}
+.page__content-regreso {
+  margin-top: calc(var(--baseline) * 2);
+  cursor: pointer;
+  color: var(--dark-text);
+  font-family: var(--body);
+  font-weight: 600;
+  text-decoration: underline;
 }
