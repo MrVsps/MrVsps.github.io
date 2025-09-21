@@ -16,12 +16,13 @@ function updateCountdown() {
     minutesEl.innerHTML = minutes < 10 ? '0' + minutes : minutes;
     secondsEl.innerHTML = seconds < 10 ? '0' + seconds : seconds;
 
-    if (timeLeft < 0) {
+   if (timeLeft < 0) {
     clearInterval(countdownInterval);
-    document.getElementById('countdown').innerHTML = '<h2>¡Ya llegaron tus flores amarillas!</h2>';
-    
-    document.getElementById('libro-btn').style.display = 'inline-block';
+    document.getElementById('countdown').style.display = 'none'; // ocultamos contador
+    document.getElementById('final-msg').style.display = 'block'; // mostramos mensaje
+    document.getElementById('libro-btn').style.display = 'inline-block'; // mostramos botón
 }
+
 
 }
 
