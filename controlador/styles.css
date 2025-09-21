@@ -58,7 +58,7 @@ h2{
     margin-top: 10px;
     text-shadow: 12px 12px 20px rgba(0, 0, 0, 0.3);
 }
-.audio-control{
+.au{
     position: absolute;
     bottom: 30px;
     right: 30px;
