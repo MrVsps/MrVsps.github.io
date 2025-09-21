@@ -26,6 +26,8 @@ p{
 	position: relative;
 	perspective: 1000px;
 	transition: 1s;
+  transform: rotateX(20deg);
+	transform-style: preserve-3d;
 }
 .book{
 	position: absolute;
@@ -34,6 +36,7 @@ p{
 	transition: 1s;
 	transform-style: preserve-3d;
 	transform-origin: left;
+  
 }
 .face-front, .face-back{
 	width: 100%;
@@ -42,11 +45,13 @@ p{
 	padding: 15px;
 	box-sizing: border-box;
 	overflow: hidden;
+  
 }
 .face-front{
 	box-shadow: inset 3px 0px 20px -7px black;
 	border-top-left-radius: 3px;
 	border-bottom-left-radius: 3px;
+  
 }
 .face-back{
 	position: absolute;
@@ -56,12 +61,13 @@ p{
 	box-shadow: inset -3px 1px 20px -7px black;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
+  
 }
 #portada{
 	background: url('https://img.freepik.com/vector-premium/ramo-flores-amarillas-icono-decorativo-flor-jardin_543062-3918.jpg?w=2000');
 }
 #portada-back{
-	background: url('../img/portadaBack.jpg');
+	background: url('');
 }
 #portada, #portada-back{
 	background-size: 100% 100%;
