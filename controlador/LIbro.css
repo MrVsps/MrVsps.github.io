@@ -59,49 +59,15 @@ body {
   background-color: var(--page-bg);
 }
 
-/* Portada - lado izquierdo, se voltea hacia la derecha */
-.book__page--1 {
-  left: 0;
-  z-index: 6;
-  transform-origin: right center;
-}
+/* Posicionamiento de las páginas */
+.book__page--1 { left: 0; z-index: 6; transform-origin: right center; }
+.book__page--2 { right: 0; z-index: 5; transform-origin: left center; }
+.book__page--3 { left: 0; z-index: 4; transform-origin: right center; }
+.book__page--4 { right: 0; z-index: 3; transform-origin: left center; }
+.book__page--5 { left: 0; z-index: 2; transform-origin: right center; }
+.book__page--6 { right: 0; z-index: 1; transform-origin: left center; }
 
-/* Página 1 - lado derecho, se voltea hacia la izquierda */
-.book__page--2 {
-  right: 0;
-  z-index: 5;
-  transform-origin: left center;
-}
-
-/* Página 2 - lado izquierdo, se voltea hacia la derecha */
-.book__page--3 {
-  left: 0;
-  z-index: 4;
-  transform-origin: right center;
-}
-
-/* Página 3 - lado derecho, se voltea hacia la izquierda */
-.book__page--4 {
-  right: 0;
-  z-index: 3;
-  transform-origin: left center;
-}
-
-/* Página 4 - lado izquierdo, se voltea hacia la derecha */
-.book__page--5 {
-  left: 0;
-  z-index: 2;
-  transform-origin: right center;
-}
-
-/* Contraportada - lado derecho */
-.book__page--6 {
-  right: 0;
-  z-index: 1;
-  transform-origin: left center;
-}
-
-/* Páginas que solo tienen imagen (portada y contraportada) */
+/* Páginas con imágenes */
 .book__page--1 img,
 .book__page--6 img {
   width: 100%;
@@ -182,72 +148,22 @@ body {
 }
 
 /* Estados de las páginas - ANIMACIONES DE VOLTEO */
+#page-2:checked ~ .book__page--1 { transform: rotateY(-180deg); }
+#page-3:checked ~ .book__page--1,
+#page-3:checked ~ .book__page--2 { transform: rotateY(-180deg); }
+#page-4:checked ~ .book__page--1,
+#page-4:checked ~ .book__page--2,
+#page-4:checked ~ .book__page--3 { transform: rotateY(-180deg); }
+#page-5:checked ~ .book__page--1,
+#page-5:checked ~ .book__page--2,
+#page-5:checked ~ .book__page--3,
+#page-5:checked ~ .book__page--4 { transform: rotateY(-180deg); }
+#page-6:checked ~ .book__page--1,
+#page-6:checked ~ .book__page--2,
+#page-6:checked ~ .book__page--3,
+#page-6:checked ~ .book__page--4,
+#page-6:checked ~ .book__page--5 { transform: rotateY(-180deg); }
 
-/* Asegúrate de que todas las páginas se volteen desde el borde correcto */
-.book__page--1, .book__page--3, .book__page--5 {
-    transform-origin: right center;
-}
-
-.book__page--2, .book__page--4, .book__page--6 {
-    transform-origin: left center;
-}
-
-/* Reglas de animación para cada página */
-
-/* Cuando se selecciona la página 2, voltea la portada */
-#page-2:checked ~ .book__page--1 {
-    transform: rotateY(-180deg);
-}
-
-/* Cuando se selecciona la página 3, voltea la portada y la página 2 */
-#page-3:checked ~ .book__page--1 {
-    transform: rotateY(-180deg);
-}
-#page-3:checked ~ .book__page--2 {
-    transform: rotateY(180deg);
-}
-
-/* Cuando se selecciona la página 4, voltea las 3 anteriores */
-#page-4:checked ~ .book__page--1 {
-    transform: rotateY(-180deg);
-}
-#page-4:checked ~ .book__page--2 {
-    transform: rotateY(180deg);
-}
-#page-4:checked ~ .book__page--3 {
-    transform: rotateY(-180deg);
-}
-
-/* Cuando se selecciona la página 5, voltea las 4 anteriores */
-#page-5:checked ~ .book__page--1 {
-    transform: rotateY(-180deg);
-}
-#page-5:checked ~ .book__page--2 {
-    transform: rotateY(180deg);
-}
-#page-5:checked ~ .book__page--3 {
-    transform: rotateY(-180deg);
-}
-#page-5:checked ~ .book__page--4 {
-    transform: rotateY(180deg);
-}
-
-/* Cuando se selecciona la página 6 (contraportada), voltea todas las páginas anteriores */
-#page-6:checked ~ .book__page--1 {
-    transform: rotateY(-180deg);
-}
-#page-6:checked ~ .book__page--2 {
-    transform: rotateY(180deg);
-}
-#page-6:checked ~ .book__page--3 {
-    transform: rotateY(-180deg);
-}
-#page-6:checked ~ .book__page--4 {
-    transform: rotateY(180deg);
-}
-#page-6:checked ~ .book__page--5 {
-    transform: rotateY(-180deg);
-}
 /* Responsive */
 @media (max-width: 768px) {
   .cover {
@@ -272,6 +188,7 @@ body {
     max-height: 35%;
   }
 }
+
 .page__content-regreso {
   margin-top: calc(var(--baseline) * 2);
   cursor: pointer;
