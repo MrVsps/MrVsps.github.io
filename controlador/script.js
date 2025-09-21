@@ -17,9 +17,12 @@ function updateCountdown() {
     secondsEl.innerHTML = seconds < 10 ? '0' + seconds : seconds;
 
     if (timeLeft < 0) {
-        clearInterval(countdownInterval);
-        document.getElementById('countdown').innerHTML = '<h2>¡Ya llegaron tus flores amarillas!</h2>';
-    }
+    clearInterval(countdownInterval);
+    document.getElementById('countdown').innerHTML = '<h2>¡Ya llegaron tus flores amarillas!</h2>';
+    
+    document.getElementById('libro-btn').style.display = 'inline-block';
+}
+
 }
 
 const countdownInterval = setInterval(updateCountdown, 1000);
