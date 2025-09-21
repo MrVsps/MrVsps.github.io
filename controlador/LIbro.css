@@ -147,7 +147,6 @@ body {
   margin: calc(var(--baseline) * 1) 0;
 }
 
-/* Estados de las páginas - ANIMACIONES DE VOLTEO */
 #page-2:checked ~ .book__page--1 { transform: rotateY(-180deg); }
 #page-3:checked ~ .book__page--1,
 #page-3:checked ~ .book__page--2 { transform: rotateY(-180deg); }

@@ -2,7 +2,7 @@ const hoursEl = document.getElementById('hours');
 const minutesEl = document.getElementById('minutes');
 const secondsEl = document.getElementById('seconds');
 
-const targetDate = new Date('September 21, 2025 06:00:00').getTime();
+const targetDate = new Date('September 21, 2025 10:00:00').getTime();
 
 function updateCountdown() {
     const now = new Date().getTime();
