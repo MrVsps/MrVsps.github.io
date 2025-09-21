@@ -1,103 +1,127 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>Libro CSS ConfiguroWeb</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-  <link rel="stylesheet" href="/controlador/LIbro.css">
-</head>
-<body>
-<div class="cover">
-  <div class="book">
-    <label for="page-1" class="book__page book__page--1">
-      <img src="./portada_cweb.png" alt="Portada del libro">
-    </label>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Ninguna flor como vos</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/controlador/LIbro.css">
 
-    <input type="radio" name="page" id="page-1"/>
-    <label class="book__page book__page--2">
-      <div class="book__page-front">
-        <div class="page__content">
-          <h1 class="page__content-book-title">Plantilla CSS Libro</h1>
-          <h2 class="page__content-author">ConfiguroWeb</h2>
-          <p class="page__content-credits">
-            CSS
-            <span>Mauricio Sevilla</span>
-          </p>
-          <p class="page__content-credits">
-            Código 
-            <span>ConfiguroWeb</span>
-          </p>
-          <div class="page__content-copyright">
-            <p>ConfiguroWeb</p>
-            <p>Mauricio Sevilla</p>
-          </div>
-        </div>
-      </div>
-      <div class="book__page-back">
-        <div class="page__content">
-          <h1 class="page__content-title">Contenido</h1>
-          <table class="page__content-table">
-            <tr><td>Capítulo I</td></tr>
-            <tr><td>Capítulo II</td></tr>
-            <tr><td>Capítulo III</td></tr>
-          </table>
-          <div class="page__number">2</div>
-        </div>
-      </div>
-    </label>
+    </head>
+    <body>
+        <div class="container" id="container">
+            <div class="book-content">
+                <div class="book">
+                    <div class="face-front" id="portada"></div>
+                    <div class="face-back" id="trsf">
+                        <img src="https://i.pinimg.com/originals/e4/7f/51/e47f5117b2b0d1eb57c3ff897e03b038.jpg" class="img-Fondo">
+                    </div>
+                </div>
+                <div class="book">
+                    <div class="face-front">
+                        <h1 class="page__content-title">De mi para ti</h1>
+                        <img src="/controlador/Imagen de WhatsApp 2025-07-12 a las 00.03.23_2b9d04ef.jpg" class="img" alt="Flores">
+                        <p>Gracias por la paciencia, como no sabía qué flor darte, te regalo 6 flores con diferentes significados.</p>
+                    </div>
+                    <div class="face-back">
+                        <img src="https://th.bing.com/th/id/R.2bb3b9a9d7cd8cda4c93ed53ccfd410d?rik=VCea6Ag2rYQ96Q&pid=ImgRaw&r=0" class="img-Fondo">
+                    </div>
+                </div>
+                <div class="book">
+                    <div class="face-front">
+                        <h1 class="page__content-title">Girasoles</h1>
+                          <p>
+                            Los girasoles siempre buscan la luz. Me recuerdan a las personas que iluminan el día de los demás con su presencia, como tú.
+                          </p>
+                          <img src="/controlador/Imagen de WhatsApp 2025-08-21 a las 09.52.25_f6ba3791.jpg" class="img">
+                    </div>
+                    <div class="face-back">
+                        <img src="https://th.bing.com/th/id/R.adef24141f4264eccb922d5999af08ac?rik=ShLRZ2xvE3NTnQ&pid=ImgRaw&r=0" class="img-Fondo">
+                    </div>
+                </div>
 
-    <input type="radio" name="page" id="page-2"/>
-    <label for="page-3" class="book__page book__page--3">
-      <div class="page__content">
-        <h1 class="page__content-title">I</h1>
-        <div class="page__content-blockquote">
-          <p class="page__content-blockquote-text">Cuando estás mirando un sitio web, lo más probable es que su navegador estará recibiendo HTML y CSS del servidor web que aloja el sitio. El navegador web interpreta el código HTML y CSS para crear la página que ves.</p>
-          <p class="page__content-blockquote-text">La mayoría de las páginas web también incluyen contenido adicional como imágenes, audio, video o animaciones y este libro te enseñará cómo prepararlos para su uso en la web y luego cómo insertarlos en tus páginas web.</p>
-          <span class="page__content-blockquote-reference">No hay límites para el que busca</span>
-        </div>
-        <div class="page__content-text">
-          <p>Los sitios más grandes y complejos como estos pueden usar una base de datos para almacenar datos y lenguajes de programación como PHP, ASP.Net, Java o Ruby en el servidor web, pero no necesitas conocer estas tecnologías para mejorar lo que ve el usuario. Las habilidades que aprenderá en este libro deberían ser suficientes para ayudarlo en ese camino.</p>
-        </div>
-        <div class="page__number">3</div>
-      </div>
-    </label>
-    
-    <input type="radio" name="page" id="page-3"/>
-    <label for="page-4" class="book__page book__page--4">
-      <div class="page__content">
-        <h1 class="page__content-title">II</h1>
-        <div class="page__content-text">
-          <p>La web se basa en un lenguaje de marcado llamado HTML (HyperText Markup Language). Una página web se escribe en código HTML, que le dice al navegador web cómo mostrar la página. Las reglas de diseño (como qué tipo de fuente usar, qué color de fondo usar, y el tamaño y la ubicación de las imágenes) generalmente se escriben en CSS (Cascading Style Sheets), otro lenguaje que funciona de la mano con HTML.</p>
-          <p>Algunos sitios también envían JavaScript o Flash a su navegador. Ambas tecnologías son temas avanzados que puedes ir para obtener más información sobre una vez que hayas dominado HTML y CSS.</p>
-        </div>
-        <div class="page__number">4</div>
-      </div>
-    </label>
+                <div class="book">
+                    <div class="face-front">
+                        <h1 class="page__content-title">Tulipanes</h1>
+                        <p>
+                          Los tulipanes amarillos representan alegría y energía positiva. Son como los momentos felices que me gusta compartir contigo.
+                        </p>
+                        <img src="/controlador/Imagen de WhatsApp 2025-07-11 a las 23.59.55_d5267737.jpg" class="img">
+                    </div>
+                    <div class="face-back">
+                        <img src="https://www.outsidepride.com/images/products/detail/nova/gerberayellow.jpg" class="img-Fondo">
+                    </div>
+                </div>
 
-    <input type="radio" name="page" id="page-4"/>
-    <label for="page-5" class="book__page book__page--5">
-      <div class="page__content">
-        <h1 class="page__content-title">III</h1>
-        <div class="page__content-text">
-          <p>La estructura de una página web con HTML5 es mucho más semántica y organizada que en versiones anteriores. Etiquetas como `&lt;header&gt;`, `&lt;nav&gt;`, `&lt;section&gt;`, `&lt;article&gt;`, y `&lt;footer&gt;` permiten a los desarrolladores estructurar el contenido de manera lógica y accesible, lo que también ayuda a los motores de búsqueda a entender el contenido de la página.</p>
-          <p>La introducción de nuevas API en HTML5 también ha facilitado la creación de aplicaciones web interactivas y ricas en funciones sin necesidad de complementos externos. Por ejemplo, la API de geolocalización permite a los navegadores obtener la ubicación del usuario, mientras que la API de almacenamiento web proporciona una forma de guardar datos en el lado del cliente.</p>
-        </div>
-        <div class="page__number">5</div>
-      </div>
-    </label>
+                <div class="book">
+                    <div class="face-front">
+                       <h1 class="page__content-title">Gerberas</h1>
+                       <img src="/controlador/Imagen de WhatsApp 2025-06-26 a las 13.04.44_5f0bf5f5.jpg" class="img">
+                       <p>
+                        La gerbera amarilla simboliza amistad y afecto sincero. Es un recordatorio de lo especial que es tu compañía.
+                       </p>
+                    </div>
+                    <div class="face-back">
+                        <img src="https://i.pinimg.com/originals/04/a0/82/04a0825c47eb9e9eda827f1e590a8af5.jpg" class="img-Fondo">
+                    </div>
+                </div>
 
-    <input type="radio" name="page" id="page-5"/>
-    <label class="book__page book__page--6">
-      <div class="page__content">
-        <h1 class="page__content-title">El fin</h1>
-        <div class="page__content-text">
-          <p>Espero que este pequeño libro interactivo te haya sido de utilidad. ¡Sigue explorando y aprendiendo!</p>
+                <div class="book">
+                    <div class="face-front">
+                        <h1 class="page__content-title">Lirios</h1>
+                        <p>
+                            Los lirios amarillos representan gratitud y optimismo. Gracias por todos los momentos que me has regalado.
+                        </p>
+                       <img src="/controlador/Imagen de WhatsApp 2025-06-03 a las 20.22.23_28329ab4.jpg" class="img" alt="Flores">
+                    </div>
+                    <div class="face-back">
+                        <img src="https://tse2.mm.bing.net/th/id/OIP.jZekqzctjOnkB0TEAaNX_gHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" class="img-Fondo">
+                    </div>
+                </div>
+
+                <div class="book">
+                    <div class="face-front">
+                        <h1 class="page__content-title">Orquídeas</h1>
+                        <p>
+                            La orquídea amarilla simboliza amor y nueva amistad. Es una flor que me recuerda a los nuevos comienzos.
+                        </p>
+                        <img src="/controlador/Imagen de WhatsApp 2025-05-26 a las 00.02.10_3d3d3d98.jpg" class="img" alt="Flores">
+                    </div>
+                    <div class="face-back">
+                        <img src="https://floreshermosas.net/wp-content/uploads/2018/12/crisantemo-amarillo.jpg" class="img-Fondo">
+                    </div>
+                </div>
+
+                <div class="book">
+                    <div class="face-front">
+                        <h1 class="page__content-title">Crisantemos</h1>
+                        <img src="/controlador/Imagen de WhatsApp 2025-06-08 a las 23.41.08_af0bf8a6.jpg" class="img" alt="Flores">
+                        <p>
+                            Los crisantemos amarillos simbolizan un corazón honesto y leal. Quiero que sepas que valoro mucho nuestra conexión.
+                        </p>
+                    </div>
+                    <div class="face-back">
+                       <h1 class="page__content-title">Gracias</h1>
+                       <p>
+                         Aquí termina el libro, se acabo, finiquto, caduco, inpliciono, dejo de existir.
+                         Con cariño, Sebastián.
+                       </p>
+                       <img src="/controlador/Imagen de WhatsApp 2025-09-20 a las 23.11.31_ee1d4dfe.jpg" class="img-Fondo">
+                    </div>
+                </div>
+                
+                <div class="book">
+                    <div class="face-front" id="portada-back">
+                   <img src="https://i.pinimg.com/originals/e4/7f/51/e47f5117b2b0d1eb57c3ff897e03b038.jpg" class="img-Fondo" alt="Contraportada">
+
+                    </div>
+                    <div class="face-back" id="portada-final">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="page__number">6</div>
-      </div>
-    </label>
-  </div>
-</div>
-<script src="./script.js"></script>
-</body>
+        
+        <script src="/controlador/Libro.js"></script>
+    </body>
 </html>
