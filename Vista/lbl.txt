@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Libro de Flores Amarillas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="/controlador/LIbro.css">
+</head>
+<body>
+
+<div class="cover">
+  <div class="book">
+    
+    <input type="radio" name="page" id="page-1" checked>
+    <label for="page-2" class="book__page book__page--1">
+      <img src="https://img.freepik.com/vector-premium/ramo-flores-amarillas-icono-decorativo-flor-jardin_543062-3918.jpg?w=2000" alt="Portada Flores Amarillas">
+    </label>
+
+    <input type="radio" name="page" id="page-2">
+    <label for="page-3" class="book__page book__page--2">
+      <div class="book__page-front">
+        <div class="page__content">
+          <h1 class="page__content-title">De mi para ti</h1>
+          <img src="/controlador/Imagen de WhatsApp 2025-07-12 a las 00.03.23_2b9d04ef.jpg" class="img" alt="Flores">
+          <p>Gracias por la paciencia, como no sabía qué flor darte, te regalo 6 diferentes flores.</p>
+        </div>
+      </div>
+      <div class="book__page-back">
+        <div class="page__content">
+          <h1 class="page__content-title">Girasoles</h1>
+          <p>
+            Los girasoles siempre buscan la luz. Me recuerdan a las personas que iluminan el día de los demás con su presencia, como tú.
+          </p>
+          <img src="/controlador/Imagen1.jpg" class="img">
+          <img src="https://th.bing.com/th/id/R.2bb3b9a9d7cd8cda4c93ed53ccfd410d?rik=VCea6Ag2rYQ96Q&pid=ImgRaw&r=0" class="img-Fondo">
+          <label for="page-1" class="page__content-regreso">Regresar</label>
+        </div>
+      </div>
+    </label>
+    
+    <input type="radio" name="page" id="page-3">
+    <label for="page-4" class="book__page book__page--3">
+      <div class="book__page-front">
+        <div class="page__content">
+          <h1 class="page__content-title">Tulipanes</h1>
+          <p>
+            Los tulipanes amarillos representan alegría y energía positiva. Son como los momentos felices que me gusta compartir contigo.
+          </p>
+          <img src="https://3.bp.blogspot.com/-fnKnz03Wx3A/Uf4iAzf5TjI/AAAAAAAAE2A/ujPgImqjJzA/s1600/IMG_6291-001.JPG" class="img-Fondo">
+          <label for="page-2" class="page__content-regreso">Regresar</label>
+        </div>
+      </div>
+      <div class="book__page-back">
+        <div class="page__content">
+          <h1 class="page__content-title">Gerberas</h1>
+          <p>
+            La gerbera amarilla simboliza amistad y afecto sincero. Es un recordatorio de lo especial que es tu compañía.
+          </p>
+          <img src="https://th.bing.com/th/id/R.a7ed1eeb7e8f1f4f30610b8de61b8e2e?rik=EdQ5t%2fhI3uQe0g&pid=ImgRaw&r=0" class="img-Fondo">
+          <label for="page-2" class="page__content-regreso">Regresar</label>
+        </div>
+      </div>
+    </label>
+
+    <input type="radio" name="page" id="page-4">
+    <label for="page-5" class="book__page book__page--4">
+      <div class="book__page-front">
+        <div class="page__content">
+          <h1 class="page__content-title">Lirios</h1>
+          <p>
+            Los lirios amarillos representan gratitud y optimismo. Gracias por todos los momentos que me has regalado.
+          </p>
+          <img src="https://th.bing.com/th/id/OIP.YXlTcm7ubCm1OZX6r74yxQHaJQ?rs=1&pid=ImgDetMain" class="img-Fondo">
+          <label for="page-3" class="page__content-regreso">Regresar</label>
+        </div>
+      </div>
+      <div class="book__page-back">
+        <div class="page__content">
+          <h1 class="page__content-title">Orquídeas</h1>
+          <p>
+            La orquídea amarilla simboliza amor y nueva amistad. Es una flor que me recuerda a los nuevos comienzos.
+          </p>
+          <img src="https://th.bing.com/th/id/OIP._2Ce_08DFVzzI5xlR2Cr3QHaE8?rs=1&pid=ImgDetMain" class="img-Fondo">
+          <label for="page-3" class="page__content-regreso">Regresar</label>
+        </div>
+      </div>
+    </label>
+
+    <input type="radio" name="page" id="page-5">
+    <label for="page-6" class="book__page book__page--5">
+      <div class="book__page-front">
+        <div class="page__content">
+          <h1 class="page__content-title">Crisantemos</h1>
+          <p>
+            Los crisantemos amarillos simbolizan un corazón honesto y leal. Quiero que sepas que valoro mucho nuestra conexión.
+          </p>
+          <img src="https://th.bing.com/th/id/OIP.d6xQoMcbVPhXw9k7oDA7tQHaE7?rs=1&pid=ImgDetMain" class="img-Fondo">
+          <label for="page-4" class="page__content-regreso">Regresar</label>
+        </div>
+      </div>
+      <div class="book__page-back">
+        <div class="page__content">
+          <h1 class="page__content-title">Gracias</h1>
+          <p>
+            Aquí termina el libro, se acabo, finiquto, caduco, inpliciono, dejo de existir.
+            Con cariño, Sebastián.
+          </p>
+          <img src="/controlador/portada.jpg" class="img-Fondo">
+          <label for="page-4" class="page__content-regreso">Regresar</label>
+        </div>
+      </div>
+    </label>
+
+    <input type="radio" name="page" id="page-6">
+    <label for="page-5" class="book__page book__page--6">
+      <img src="/controlador/contraportada.jpg" alt="Contraportada">
+    </label>
+  </div>
+</div>
+
+</body>
+</html>
