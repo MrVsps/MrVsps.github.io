@@ -29,7 +29,7 @@ p{
 	width: 65%;
 	min-width: 250px;
 	max-width: 400px;
-	height: 330px;
+	height: 80%;
 	perspective: 1000px;
 	transition: 1s;
 	transform-style: preserve-3d;
