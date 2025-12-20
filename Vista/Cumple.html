@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Felices 18, Camila</title>
+<style>
+    /* Estilos Base (Mantenidos de tu original) */
+    html, body {
+      margin: 0; padding: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fff0f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .card-container {
+      position: relative;
+      width: 300px;
+      height: 180px;
+      cursor: pointer;
+    }
+
+    .envelope-base {
+      width: 100%;
+      height: 100%;
+      background-color: #ffb6c1;
+      border-radius: 0 0 5px 5px;
+      position: absolute;
+      bottom: 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 2;
+    }
+
+    .envelope-flap {
+      width: 300px;
+      height: 150px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: top center;
+      transition: transform 0.6s ease;
+      z-index: 3;
+      background: none;
+    }
+
+    .envelope-flap::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 150px solid transparent;
+      border-right: 150px solid transparent;
+      border-top: 120px solid #910166;
+    }
+
+    .heart {
+      position: absolute;
+      top: -10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background-color: #ff6b8b;
+      transform: rotate(45deg);
+      z-index: 4;
+    }
+
+    .heart:before, .heart:after {
+      content: '';
+      width: 30px;
+      height: 30px;
+      background-color: #ff6b8b;
+      border-radius: 50%;
+      position: absolute;
+    }
+
+    .heart:before { top: -15px; left: 0; }
+    .heart:after { top: 0; left: -15px; }
+
+    .stamp {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+      background-color: #ffd700;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #910166;
+      font-weight: bold;
+      font-size: 18px;
+      transform: rotate(-15deg);
+      z-index: 9;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    /* La Carta */
+    .letter {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 750px; 
+      max-width: 95vw;
+      max-height: 90vh;
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-sizing: border-box;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: translate(-50%, 100%);
+      transition: transform 0.6s ease, opacity 0.4s ease 0.3s;
+      overflow-y: auto;
+      z-index: 20;
+      pointer-events: none; 
+    }
+
+    .letter.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+    }
+
+    .letter-content {
+      display: grid;
+      grid-template-columns: 1fr 2.5fr 1fr; 
+      gap: 20px;
+    }
+
+    .photo-column img {
+        width: 120px;
+        height: 120px;
+        object-fit:fill;
+        border-radius: 8px;
+        border: 3px solid #ffb6c1;
+        margin-bottom: 15px;
+    }
+
+    .text-column {
+        text-align: center;
+    }
+
+    .main-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 5px solid #ffd700;
+        margin-bottom: 20px;
+    }
+
+    h2 { color: #910166; font-size: 32px; margin-bottom: 10px; }
+    
+    /* Contenedor de los 100 consejos */
+    .tips-container {
+        margin-top: 30px;
+        padding: 20px;
+        background: #fffafa;
+        border: 2px solid #ffe4e1;
+        border-radius: 10px;
+        text-align: left;
+        max-height: 400px;
+        overflow-y: scroll;
+    }
+
+    .tips-container h3 {
+        color: #ff6b8b;
+        text-align: center;
+        border-bottom: 2px solid #ffb6c1;
+        padding-bottom: 10px;
+    }
+
+    .tips-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .tips-list li {
+        margin-bottom: 12px;
+        padding-left: 25px;
+        position: relative;
+        font-size: 14px;
+        color: #444;
+        line-height: 1.4;
+    }
+
+    .tips-list li::before {
+        content: '✨';
+        position: absolute;
+        left: 0;
+    }
+
+    .category-title {
+        font-weight: bold;
+        color: #910166;
+        margin-top: 15px;
+        display: block;
+        text-decoration: underline;
+    }
+
+    .signature {
+        margin-top: 30px;
+        font-weight: bold;
+        font-size: 20px;
+        color: #ff6b8b;
+    }
+    .au{
+    position: fixed;
+    bottom: 10px;
+    right: 30px;
+}
+
+    @media (max-width: 768px) {
+        .letter-content { grid-template-columns: 1fr; }
+        .photo-column { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .letter { padding: 20px; }
+    }
+</style>
+</head>
+<body>
+
+  <div class="card-container" id="card-container">
+    <div class="envelope-base"></div>
+    <div class="envelope-flap"></div>
+    <div class="heart"></div>
+    <div class="stamp">18</div>
+  </div>
+
+  <div class="letter" id="letter">
+    <div class="letter-content">
+        
+        <div class="photo-column">
+            <img src="/controlador/Imagen de WhatsApp 2025-09-20 a las 23.11.31_ee1d4dfe.jpg" alt="Camila 1" />
+           
+        </div>
+
+        <div class="text-column">
+            <img src="/controlador/Cumpleaños.jpeg" alt="Camila" class="main-image" />
+            <h2>¡Felices 18 años, Cami! 👑</h2>
+            <p>
+                Hoy dejas atrás una etapa maravillosa para entrar a la gran aventura de la vida adulta. 
+                Eres una mujer brillante, capaz y con un corazón de oro. Quiero que este día sea el inicio 
+                del mejor capítulo de tu vida. ¡El mundo es tuyo!
+
+                Parece increíble, pero hoy se cumple exactamente <b>un año</b> desde aquel día en que nuestros caminos se cruzaron por primera vez en este mundo digital. Lo que comenzó como una simple mensaje en never, se ha convertido para mí en una de las amistades más sinceras y valiosas que tengo. <br><br>
+                
+                Hoy no solo celebro tu vida, sino también el primer aniversario de conocernos. Verte llegar a los 18 es un momento enorme; es el inicio de tu libertad, de tus sueños más grandes y de esa vida adulta que a veces asusta, pero que estoy seguro vas a conquistar con la misma chispa y fuerza que me mostraste en estos 12 meses.<br><br>
+                
+                Aunque nos separe una pantalla, quiero que sientas que estoy ahí celebrando contigo. Eres una mujer increíble, auténtica y con un corazón que brilla incluso a la distancia que estamos. Nunca dejes que nada apague esa luz.
+            </p>
+
+            <div class="tips-container">
+                <h3>📜 100 Consejos para tu Vida Adulta</h3>
+                <ul class="tips-list" id="tips-list">
+                    </ul>
+            </div>
+
+            <p class="signature">Te aprecio muchísimo,<br>Tu manolo</p>
+        </div>
+
+        <div class="photo-column">
+            <img src="/controlador/image.png" alt="Camila 3" />
+        </div>
+        
+    </div>
+
+  </div>
+<audio id="countdown-audio" class="au" controls autoplay loop src="/controlador/ytmp3free.cc_morat-antes-de-los-veinte-visualiser-youtubemp3free.org.mp3" preload="auto"></audio>
+
+<script>
+    const container = document.getElementById('card-container');
+    const letter = document.getElementById('letter');
+    const tipsList = document.getElementById('tips-list');
+
+    // Lista de consejos (Resumen de los más importantes divididos por categorías)
+    const consejos = [
+        { cat: "Finanzas", text: "Aprende a ahorrar el 10% de lo que ganes, por poco que sea." },
+        { cat: "Finanzas", text: "Tu historial crediticio es tu reputación financiera; cuídalo." },
+        { cat: "Finanzas", text: "Aprende la diferencia entre una necesidad y un deseo." },
+        { cat: "Bienestar", text: "Usa bloqueador solar todos los días. Tu piel del futuro te lo agradecerá." },
+        { cat: "Bienestar", text: "Dormir 8 horas no es un lujo, es una necesidad biológica." },
+        { cat: "Relaciones", text: "Calidad siempre sobre cantidad en las amistades." },
+        { cat: "Relaciones", text: "Aprende a decir 'No' sin sentirte culpable." },
+        { cat: "Vida", text: "La cocina básica te ahorrará una fortuna y te hará más sana." },
+        { cat: "Vida", text: "Nunca dejes de aprender algo nuevo, aunque no sea para el trabajo." },
+        { cat: "Mentalidad", text: "Fracasar es solo una forma de aprender cómo no hacer las cosas." },
+        // ... (Aquí se pueden añadir los 100, añadiré una carga automática para el ejemplo)
+    ];
+
+    // Simulación de 100 consejos para completar la lista
+    const masConsejos = [
+        "Bebe mucha agua.", "Lee un libro al mes.", "Aprende a cambiar una llanta.", 
+        "No te compares con lo que ves en Instagram.", "Viaja siempre que puedas.", 
+        "Aprende a estar sola y disfrutar de tu propia compañía.", "Vota siempre.", 
+        "Hazte chequeos médicos anuales.", "Llama a tus padres seguido.", 
+        "Aprende a pedir perdón sinceramente.", "No tomes decisiones importantes cuando estés enojada.",
+        "Invierte en un buen colchón.", "Limpia tu casa 15 minutos al día.", 
+        "Aprende a manejar Excel.", "Ten un fondo de emergencia.", "Sé puntual.",
+        "Escucha más de lo que hablas.", "No gastes dinero que aún no has ganado.",
+        "Aprende a lavar tu ropa delicada.", "Trata a todos con respeto.", 
+        "Escribe tus metas en papel.", "Medita al menos 5 minutos.", "Usa hilo dental.",
+        "No te tomes nada personal.", "Cree en tu intuición.", "Aprende a negociar.",
+        "No temas pedir ayuda.", "Mantén tus plantas vivas.", "Viste para ti, no para los demás.",
+        "Aprende a decir 'gracias'.", "Sé la persona que hace sentir bien a los demás.",
+        "Aprende a coser un botón.", "Cuida tu postura.", "No te desveles por algo que no recordarás en un año.",
+        "Aprende a manejar el estrés.", "Ten un hobby que no involucre pantallas.",
+        "Aprende a leer contratos antes de firmar.", "Sé amable con los camareros.",
+        "La salud mental es tan importante como la física.", "No guardes rencor.",
+        "Aprende a hacer una maleta ligera.", "Valora el tiempo de los demás.",
+        "Descubre qué te apasiona.", "No esperes el momento perfecto, créalo.",
+        "Lleva siempre una batería portátil.", "Aprende a distinguir el amor de la costumbre.",
+        "Aprende sobre impuestos básicos.", "Come frutas y verduras.", "Perdónate a ti misma.",
+        "No te compares con los demás.", "Aprende a manejar tus emociones.", "Ten paciencia.",
+        "Haz ejercicio regularmente.", "Disfruta el presente.", "Aprende a ser resiliente.",
+        "Cultiva tu curiosidad.", "Sé auténtica.", "Ríete de ti misma.", "Aprende a soltar.",
+        "Rodéate de gente que te inspire.", "Haz lo que amas.", "Sé agradecida.",
+        "Confía en el proceso.", "Aprende de tus errores.", "Sé valiente.",
+        "Aprende a poner límites.", "Cuida tu energía.", "Sé compasiva.",
+        "No juzgues a los demás.", "Vive con propósito.", "Sé humilde.",
+        "Aprende a escuchar tu cuerpo.", "Ten fe en ti misma.", "Sé optimista.",
+        "Aprende a equilibrar tu vida.", "Sé responsable.", "Haz el bien.",
+        "No te rindas.", "Busca la felicidad en las pequeñas cosas.", "Sé feliz.",
+        "Vive intensamente.", "Ama profundamente.", "Aprende a ser autosuficiente.",
+        "Valora tu libertad.", "Sigue tus sueños.", "Aprende a delegar.",
+        "Sé constante.", "Confía en tu capacidad.", "Crea recuerdos.", "Vive sin miedos.",
+        "Sé la mejor versión de ti.", "Aprende a apreciar el silencio.", "Ten criterio propio.",
+        "Aprende a reconocer tus logros.", "Sé curiosa.", "Aprende a ahorrar energía.",
+        "Nunca olvides de dónde vienes.", "Sé el cambio que quieres ver.", "Elige ser feliz."
+    ];
+
+    function cargarConsejos() {
+        masConsejos.forEach((texto, index) => {
+            const li = document.createElement('li');
+            li.textContent = `${index + 1}. ${texto}`;
+            tipsList.appendChild(li);
+        });
+    }
+
+    cargarConsejos();
+
+    function showLetter() {
+      container.querySelector('.envelope-flap').style.transform = 'rotateX(180deg)';
+      letter.classList.add('visible');
+    }
+    
+    function hideLetter() {
+      letter.classList.remove('visible');
+      container.querySelector('.envelope-flap').style.transform = '';
+    }
+    
+    container.addEventListener('click', () => {
+        if(letter.classList.contains('visible')) hideLetter();
+        else showLetter();
+    });
+
+</script>
+
+
+
+</body>
+</html>
