@@ -1,7 +1,7 @@
 // 1. Definir las fechas objetivo (Ajusta el año y mes según necesites)
 const fechas = {
     flores: new Date('September 21, 2025 12:20:00').getTime(),
-    aniversario: new Date('December 20, 2025 08:00:00').getTime(), // Cambia esta fecha
+    aniversario: new Date('December 20, 2025 20:00:00').getTime(), // Cambia esta fecha
     cumple: new Date('December 20, 2025 08:00:00').getTime()      // Cambia esta fecha
 };
 
