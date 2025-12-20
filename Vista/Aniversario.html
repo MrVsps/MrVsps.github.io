@@ -5,9 +5,326 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aniversario - Un año de historia</title>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css">
-  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="/controlador/carrucel.css" />
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+  <style>
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap");
+
+:root {
+   --card-width: 200px;
+   --card-height: 300px;
+   --card-transition-duration: 800ms;
+   --card-transition-easing: ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+   width: 100%;
+   height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   background: rgba(0, 0, 0, 0.787);
+   overflow: hidden;
+}
+
+button {
+   border: none;
+   background: none;
+   cursor: pointer;
+}
+
+button:focus {
+   outline: none;
+   border: none;
+}
+
+.app {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.app__bg {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   z-index: -5;
+   filter: blur(8px);
+   pointer-events: none;
+   user-select: none;
+   overflow: hidden;
+}
+
+.app__bg::before {
+   content: "";
+   position: absolute;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   background: #000;
+   z-index: 1;
+   opacity: 0.8;
+}
+
+.app__bg__image {
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%) translateX(var(--image-translate-offset, 0));
+   width: 180%;
+   height: 180%;
+   transition: transform 1000ms ease, opacity 1000ms ease;
+   overflow: hidden;
+}
+
+.app__bg__image img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.app__bg__image.current--image {
+   opacity: 1;
+   --image-translate-offset: 0;
+}
+
+.app__bg__image.previous--image, .app__bg__image.next--image {
+   opacity: 0;
+}
+
+.app__bg__image.previous--image {
+   --image-translate-offset: -25%;
+}
+
+.app__bg__image.next--image {
+   --image-translate-offset: 25%;
+}
+
+.cardList {
+   position: absolute;
+   width: calc(3 * var(--card-width));
+   height: auto;
+}
+
+.cardList__btn {
+   --btn-size: 35px;
+   width: var(--btn-size);
+   height: var(--btn-size);
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+   z-index: 100;
+}
+
+.cardList__btn.btn--left {
+   left: -5%;
+}
+
+.cardList__btn.btn--right {
+   right: -5%;
+}
+
+.cardList__btn .icon {
+   width: 100%;
+   height: 100%;
+}
+
+.cardList__btn .icon svg {
+   width: 100%;
+   height: 100%;
+}
+
+.cardList .cards__wrapper {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   perspective: 1000px;
+}
+
+.card {
+   --card-translateY-offset: 0;
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%) translateX(var(--card-translateX-offset)) translateY(var(--card-translateY-offset)) rotateY(var(--card-rotation-offset)) scale(var(--card-scale-offset));
+   display: inline-block;
+   width: var(--card-width);
+   height: var(--card-height);
+   transition: transform var(--card-transition-duration) var(--card-transition-easing);
+   user-select: none;
+}
+
+.card::before {
+   content: "";
+   position: absolute;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   background: #000;
+   z-index: 1;
+   transition: opacity var(--card-transition-duration) var(--card-transition-easing);
+   opacity: calc(1 - var(--opacity));
+}
+
+.card__image {
+   position: relative;
+   width: 100%;
+   height: 100%;
+}
+
+.card__image img {
+   position: absolute;
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.card.current--card {
+   --current-card-rotation-offset: 0;
+   --card-translateX-offset: 0;
+   --card-rotation-offset: var(--current-card-rotation-offset);
+   --card-scale-offset: 1.2;
+   --opacity: 0.8;
+}
+
+.card.previous--card {
+   --card-translateX-offset: calc(-1 * var(--card-width) * 1.1);
+   --card-rotation-offset: 25deg;
+}
+
+.card.next--card {
+   --card-translateX-offset: calc(var(--card-width) * 1.1);
+   --card-rotation-offset: -25deg;
+}
+
+.card.previous--card, .card.next--card {
+   --card-scale-offset: 0.9;
+   --opacity: 0.4;
+}
+
+.infoList {
+   position: absolute;
+   width: calc(3 * var(--card-width));
+   height: var(--card-height);
+   pointer-events: none;
+}
+
+.infoList .info__wrapper {
+   position: relative;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   justify-content: flex-start;
+   align-items: flex-end;
+   perspective: 1000px;
+   transform-style: preserve-3d;
+}
+
+.info {
+   margin-bottom: calc(var(--card-height) / 8);
+   margin-left: calc(var(--card-width) / 1.5);
+   transform: translateZ(2rem);
+   transition: transform var(--card-transition-duration) var(--card-transition-easing);
+   opacity: 0;
+   display: none;
+   background: rgba(0, 0, 0, 0.6);
+   padding: 20px 25px;
+   border-radius: 12px;
+   backdrop-filter: blur(10px);
+   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info.current--info {
+   opacity: 1;
+   display: block;
+}
+
+.info .text {
+   position: relative;
+   font-family: "Montserrat";
+   font-size: calc(var(--card-width) * var(--text-size-offset, 0.2));
+   color: #fff;
+   width: fit-content;
+   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8),
+                0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.info .name, .info .location {
+   text-transform: uppercase;
+}
+
+.info .name {
+   font-weight: 800;
+}
+
+.info .location {
+   --mg-left: 40px;
+   --text-size-offset: 0.12;
+   font-weight: 600;
+   margin-left: var(--mg-left);
+   margin-bottom: calc(var(--mg-left) / 2);
+   padding-bottom: 0.8rem;
+}
+
+.info .location::before, .info .location::after {
+   content: "";
+   position: absolute;
+   background: #fff;
+   left: 0%;
+   transform: translate(calc(-1 * var(--mg-left)), -50%);
+}
+
+.info .location::before {
+   top: 50%;
+   width: 20px;
+   height: 5px;
+}
+
+.info .location::after {
+   bottom: 0;
+   width: 60px;
+   height: 2px;
+}
+
+.info .description {
+   --text-size-offset: 0.065;
+   font-weight: 500;
+   white-space: normal;
+   max-width: 400px;
+   line-height: 1.4;
+   font-size: 13px;
+}
+
+.info .name { 
+   font-size: 24px;
+   white-space: normal;
+}
+
+.au {
+    position: fixed;
+    bottom: 10px;
+    right: 30px;
+}
+
+@media only screen and (min-width: 800px) {
+   :root {
+     --card-width: 250px;
+     --card-height: 400px;
+   }
+}
+  </style>
 </head>
 <body>
   
@@ -42,9 +359,13 @@
       <div class="card">
         <div class="card__image"><img src="/controlador/image copy 5.png" alt="Orgullo" /></div>
       </div>
+      <div class="card">
+        <div class="card__image"><img src="/controlador/Imagen de WhatsApp 2025-08-21 a las 09.52.25_f6ba3791.jpg" alt="Destino" /></div>
+      </div>
       <div class="card previous--card">
         <div class="card__image"><img src="/controlador/image copy 6.png" alt="Destino" /></div>
       </div>
+      
     </div>
 
     <button class="cardList__btn btn btn--right">
@@ -57,55 +378,61 @@
       <div class="info current--info">
         <h1 class="text name">El Inicio</h1>
         <h4 class="text location">Neverland</h4>
-        <p class="text description">Estaba aburrido de jugar solo y te mandé aquel mensaje buscando pareja, tutor y clan... todo en uno para sacar más bonificaciones. No sabía que estaba empezando esto.</p>
+        <p class="text description">Hace exactamente un año, una noche aburrida de jugar solo, te mandé ese largo mensaje buscando pareja, tutor y clan... todo en uno para las bonificaciones. Sin saberlo, estaba empezando algo más grande que cualquier juego.</p>
       </div>
 
       <div class="info next--info">
         <h1 class="text name">El Milagro</h1>
         <h4 class="text location">Un Sí inesperado</h4>
-        <p class="text description">Al día siguiente aceptaste. Me confesaste después que fue un milagro, porque te pareció raro recibir eso de un desconocido, pero decidiste responder.</p>
+        <p class="text description">Al día siguiente me escribiste aceptando. Dijiste después que fue un milagro, porque te pareció raro ese mensaje de un desconocido. Pero por alguna razón, decidiste responder. Y qué suerte la mía que lo hicieras.</p>
       </div>
 
       <div class="info">
         <h1 class="text name">271 Días</h1>
         <h4 class="text location">Nuestra Racha</h4>
-        <p class="text description">Nos casamos en el juego y hoy nuestra racha en TikTok cumple 271 días. Tantos momentos compartidos que se resumen en ese número que cuidamos a diario.</p>
+        <p class="text description">Nos casamos en el juego y hoy nuestra racha en TikTok cumple 271 días. Cada día, esa pequeña llama que cuidamos juntos, representa todos los momentos que hemos compartido desde entonces.</p>
       </div>
 
       <div class="info">
         <h1 class="text name">Aventuras</h1>
         <h4 class="text location">Roblox y Parchís</h4>
-        <p class="text description">Conquistamos el Everest en Roblox y jugando Parchís descubrí que tu prima me odia. Cada juego era una nueva forma de estar juntos.</p>
+        <p class="text description">Conquistamos el Everest en Roblox y jugando Parchís descubrí que tu prima definitivamente me odia. Cada juego era una excusa más para pasar tiempo juntos, para escuchar tu risa y disfrutar tu compañía.</p>
       </div>
 
       <div class="info">
         <h1 class="text name">La Confusión</h1>
         <h4 class="text location">Malentendidos</h4>
-        <p class="text description">En mi mudanza, pensaste que te trataba como niña y yo que te declarabas. Lo negué histéricamente, jurando que jamás me gustarías... qué ironía nos esperaba.</p>
+        <p class="text description">Durante mi mudanza, pensaste que te trataba como niña y yo creí que te estabas declarando. Lo negué histéricamente, jurando que jamás me gustarías. Qué ironía, ¿verdad? El destino se rió de mí ese día.</p>
       </div>
 
       <div class="info">
         <h1 class="text name">Lo Inevitable</h1>
         <h4 class="text location">Sentimientos Reales</h4>
-        <p class="text description">Dejé de ser tu alumno y empecé con los piropos. Gracias a una charla con mi hermana entendí que lo que juré que no pasaría, ya era una realidad: me gustabas de verdad.</p>
+        <p class="text description">Dejé de ser tu alumno y comencé con los piropos. Rolleaba mi papel de esposo del juego con dedicación. Gracias a una charla con mi hermana entendí que lo que juré que no pasaría, ya era mi realidad: me gustabas de verdad.</p>
       </div>
 
       <div class="info">
         <h1 class="text name">Perdón</h1>
         <h4 class="text location">Octubre e ICFES</h4>
-        <p class="text description">Llegaron tus pruebas y, por no saber cómo animarte, terminé burlándome. Es uno de mis grandes arrepentimientos, solo quería apoyarte y no supe cómo.</p>
+        <p class="text description">Llegaron tus pruebas ICFES y, sin saber cómo animarte, terminé burlándome. Es uno de mis grandes arrepentimientos. Solo quería apoyarte, hacerte sonreír ante la presión, pero no supe cómo. Lo siento.</p>
       </div>
 
       <div class="info">
         <h1 class="text name">Orgullo</h1>
         <h4 class="text location">Tu Graduación</h4>
-        <p class="text description">Te graduaste en diciembre y no imaginas lo orgulloso que estoy. No importa el camino que elijas ahora, cuentas conmigo para apoyarte con todo lo que tengo.</p>
+        <p class="text description">Te graduaste en diciembre y no imaginas lo orgulloso que estoy. Me alegraste el día con esa noticia. No importa el camino que elijas ahora, cuentas conmigo para apoyarte con todo lo que tengo.</p>
+      </div>
+
+      <div class="info">
+        <h1 class="text name">La Posibilidad</h1>
+        <h4 class="text location">Un Rayo de Esperanza</h4>
+        <p class="text description">A mediados de año me dejaste caer la posibilidad de que yo te gustaba. Para ese momento ya estaba enganchado a pasar mis noches jugando contigo. Por supuesto que te quería, pero entendí que necesitabas tiempo para estar segura.</p>
       </div>
 
       <div class="info previous--info">
         <h1 class="text name">20 de Diciembre</h1>
-        <h4 class="text location">Aniversario</h4>
-        <p class="text description">Me dijiste que no tienes la madurez para corresponderme, y está bien. Acepto el viento que te lleva, pero me quedo feliz de haber disfrutado de tu compañía todo este año.</p>
+        <h4 class="text location">Aniversario y Despedida</h4>
+        <p class="text description">Me dijiste que no tienes la madurez para corresponderme, y está bien. Acepto el viento que te lleva. Pero me quedo feliz y agradecido de haber disfrutado de tu compañía todo este año. Gracias por cada momento, cada risa, cada juego. Fuiste especial.</p>
       </div>
     </div>
   </div>
@@ -119,18 +446,195 @@
     <div class="app__bg__image"><img src="/controlador/WhatsApp Image 2025-12-20 at 5.32.24 PM.jpeg" /></div>
     <div class="app__bg__image"><img src="/controlador/image copy 4.png" /></div>
     <div class="app__bg__image"><img src="/controlador/image copy 5.png" /></div>
+    <div class="app__bg__image"><img src="/controlador/Imagen de WhatsApp 2025-08-21 a las 09.52.25_f6ba3791.jpg" /></div>
     <div class="app__bg__image previous--image"><img src="/controlador/image copy 6.png" /></div>
   </div>
 </div>
-<audio id="countdown-audio" class="au" controls autoplay loop src="/controlador/Floricienta — Flores Amarillas [Letra].mp3" preload="auto"></audio>
+        <audio id="countdown-audio" class="au" controls autoplay loop src="/controlador/ytmp3free.cc_balada-para-una-despedida-hd-video-oficial-jose-luis-perales-youtubemp3free.org.mp3" preload="auto"></audio>
 
 <svg class="icons" style="display: none;">
   <symbol id="arrow-left" viewBox='0 0 512 512'><polyline points='328 112 184 256 328 400' style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px'/></symbol>
   <symbol id="arrow-right" viewBox='0 0 512 512'><polyline points='184 112 328 256 184 400' style='fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px'/></symbol>
 </svg>
 
-<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.3/gsap.min.js"></script>
-<script src="/controlador/carrucel.js"></script>
+<script>
+const { gsap } = window;
+
+const buttons = {
+    prev: document.querySelector(".btn--left"),
+    next: document.querySelector(".btn--right"),
+};
+const cardsContainerEl = document.querySelector(".cards__wrapper");
+const appBgContainerEl = document.querySelector(".app__bg");
+const cardInfosContainerEl = document.querySelector(".info__wrapper");
+
+let currentIndex = 0;
+const cards = [...cardsContainerEl.querySelectorAll(".card")];
+const bgs = [...appBgContainerEl.querySelectorAll(".app__bg__image")];
+const infos = [...cardInfosContainerEl.querySelectorAll(".info")];
+const totalCards = cards.length;
+
+buttons.next.addEventListener("click", () => swapCards("right"));
+buttons.prev.addEventListener("click", () => swapCards("left"));
+
+function swapCards(direction) {
+    // Remover todas las clases de todas las tarjetas
+    cards.forEach(card => {
+        card.classList.remove("current--card", "next--card", "previous--card");
+    });
+    bgs.forEach(bg => {
+        bg.classList.remove("current--image", "next--image", "previous--image");
+    });
+
+    // Calcular nuevo índice
+    if (direction === "right") {
+        currentIndex = (currentIndex + 1) % totalCards;
+    } else {
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+    }
+
+    // Calcular índices vecinos
+    const prevIndex = (currentIndex - 1 + totalCards) % totalCards;
+    const nextIndex = (currentIndex + 1) % totalCards;
+
+    // Aplicar clases a las tarjetas correctas
+    cards[currentIndex].classList.add("current--card");
+    cards[prevIndex].classList.add("previous--card");
+    cards[nextIndex].classList.add("next--card");
+
+    bgs[currentIndex].classList.add("current--image");
+    bgs[prevIndex].classList.add("previous--image");
+    bgs[nextIndex].classList.add("next--image");
+
+    // Ajustar z-index
+    cards[currentIndex].style.zIndex = "50";
+    cards[prevIndex].style.zIndex = "30";
+    cards[nextIndex].style.zIndex = "30";
+
+    bgs[currentIndex].style.zIndex = "-1";
+    bgs[prevIndex].style.zIndex = "-2";
+    bgs[nextIndex].style.zIndex = "-2";
+
+    changeInfo(direction);
+}
+
+function changeInfo(direction) {
+    // Remover todas las clases de info
+    infos.forEach(info => {
+        info.classList.remove("current--info", "next--info", "previous--info");
+    });
+
+    const prevIndex = (currentIndex - 1 + totalCards) % totalCards;
+    const nextIndex = (currentIndex + 1) % totalCards;
+
+    gsap.timeline()
+        .to([buttons.prev, buttons.next], {
+            duration: 0.2,
+            opacity: 0.5,
+            pointerEvents: "none",
+        })
+        .to(
+            infos[currentIndex].querySelectorAll(".text"),
+            {
+                duration: 0.4,
+                stagger: 0.1,
+                translateY: "-120px",
+                opacity: 0,
+            },
+            "-="
+        )
+        .call(() => {
+            // Aplicar clases a los infos correctos
+            infos[currentIndex].classList.add("current--info");
+            infos[prevIndex].classList.add("previous--info");
+            infos[nextIndex].classList.add("next--info");
+        })
+        .call(() => initCardEvents())
+        .fromTo(
+            infos[currentIndex].querySelectorAll(".text"),
+            {
+                opacity: 0,
+                translateY: "40px",
+            },
+            {
+                duration: 0.4,
+                stagger: 0.1,
+                translateY: "0px",
+                opacity: 1,
+            }
+        )
+        .to([buttons.prev, buttons.next], {
+            duration: 0.2,
+            opacity: 1,
+            pointerEvents: "all",
+        });
+}
+
+function updateCard(e) {
+    const card = e.currentTarget;
+    const box = card.getBoundingClientRect();
+    const centerPosition = {
+        x: box.left + box.width / 2,
+        y: box.top + box.height / 2,
+    };
+    let angle = Math.atan2(e.pageX - centerPosition.x, 0) * (35 / Math.PI);
+    gsap.set(card, {
+        "--current-card-rotation-offset": `${angle}deg`,
+    });
+    const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
+    gsap.set(currentInfoEl, {
+        rotateY: `${angle}deg`,
+    });
+}
+
+function resetCardTransforms(e) {
+    const card = e.currentTarget;
+    const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
+    gsap.set(card, {
+        "--current-card-rotation-offset": 0,
+    });
+    gsap.set(currentInfoEl, {
+        rotateY: 0,
+    });
+}
+
+function initCardEvents() {
+    const currentCardEl = cardsContainerEl.querySelector(".current--card");
+    if (currentCardEl) {
+        currentCardEl.addEventListener("pointermove", updateCard);
+        currentCardEl.addEventListener("pointerout", (e) => {
+            resetCardTransforms(e);
+        });
+    }
+}
+
+initCardEvents();
+
+// Animación inicial
+gsap.to(cardsContainerEl.children, {
+    delay: 0.15,
+    duration: 0.5,
+    stagger: {
+        ease: "power4.inOut",
+        from: "right",
+        amount: 0.1,
+    },
+    "--card-translateY-offset": "0%",
+})
+.to(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
+    delay: 0.5,
+    duration: 0.4,
+    stagger: 0.1,
+    opacity: 1,
+    translateY: 0,
+})
+.to([buttons.prev, buttons.next], {
+    duration: 0.4,
+    opacity: 1,
+    pointerEvents: "all",
+}, "-=0.4");
+</script>
+
 </body>
 </html>

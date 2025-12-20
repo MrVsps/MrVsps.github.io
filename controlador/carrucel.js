@@ -1,6 +1,4 @@
-console.clear();
-
-const { gsap, imagesLoaded } = window;
+const { gsap } = window;
 
 const buttons = {
     prev: document.querySelector(".btn--left"),
@@ -10,180 +8,168 @@ const cardsContainerEl = document.querySelector(".cards__wrapper");
 const appBgContainerEl = document.querySelector(".app__bg");
 const cardInfosContainerEl = document.querySelector(".info__wrapper");
 
+let currentIndex = 0;
+const cards = [...cardsContainerEl.querySelectorAll(".card")];
+const bgs = [...appBgContainerEl.querySelectorAll(".app__bg__image")];
+const infos = [...cardInfosContainerEl.querySelectorAll(".info")];
+const totalCards = cards.length;
+
 buttons.next.addEventListener("click", () => swapCards("right"));
 buttons.prev.addEventListener("click", () => swapCards("left"));
 
 function swapCards(direction) {
-    const cards = [...cardsContainerEl.querySelectorAll(".card")];
-    const bgs = [...appBgContainerEl.querySelectorAll(".app__bg__image")];
-    const infos = [...cardInfosContainerEl.querySelectorAll(".info")];
-    
-    const currentIdx = cards.findIndex(c => c.classList.contains("current--card"));
-    
-    // Calcular nuevos índices
-    let nextIdx, prevIdx;
+    // Remover todas las clases de todas las tarjetas
+    cards.forEach(card => {
+        card.classList.remove("current--card", "next--card", "previous--card");
+    });
+    bgs.forEach(bg => {
+        bg.classList.remove("current--image", "next--image", "previous--image");
+    });
+
+    // Calcular nuevo índice
     if (direction === "right") {
-        nextIdx = (currentIdx + 1) % cards.length;
-        prevIdx = (currentIdx - 1 + cards.length) % cards.length;
+        currentIndex = (currentIndex + 1) % totalCards;
     } else {
-        nextIdx = (currentIdx - 1 + cards.length) % cards.length;
-        prevIdx = (currentIdx + 1) % cards.length;
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
     }
 
-    // Remover clases actuales
-    cards.forEach(c => c.classList.remove("current--card", "next--card", "previous--card"));
-    bgs.forEach(b => b.classList.remove("current--image", "next--image", "previous--image"));
-    
-    // Aplicar nuevas clases
-    const newCurrent = direction === "right" ? nextIdx : nextIdx; 
-    const newNext = (newCurrent + 1) % cards.length;
-    const newPrev = (newCurrent - 1 + cards.length) % cards.length;
+    // Calcular índices vecinos
+    const prevIndex = (currentIndex - 1 + totalCards) % totalCards;
+    const nextIndex = (currentIndex + 1) % totalCards;
 
-    cards[newCurrent].classList.add("current--card");
-    cards[newNext].classList.add("next--card");
-    cards[newPrev].classList.add("previous--card");
+    // Aplicar clases a las tarjetas correctas
+    cards[currentIndex].classList.add("current--card");
+    cards[prevIndex].classList.add("previous--card");
+    cards[nextIndex].classList.add("next--card");
 
-    bgs[newCurrent].classList.add("current--image");
-    bgs[newNext].classList.add("next--image");
-    bgs[newPrev].classList.add("previous--image");
+    bgs[currentIndex].classList.add("current--image");
+    bgs[prevIndex].classList.add("previous--image");
+    bgs[nextIndex].classList.add("next--image");
+
+    // Ajustar z-index
+    cards[currentIndex].style.zIndex = "50";
+    cards[prevIndex].style.zIndex = "30";
+    cards[nextIndex].style.zIndex = "30";
+
+    bgs[currentIndex].style.zIndex = "-1";
+    bgs[prevIndex].style.zIndex = "-2";
+    bgs[nextIndex].style.zIndex = "-2";
 
     changeInfo(direction);
-    initCardEvents();
 }
 
 function changeInfo(direction) {
-    let infos = [...cardInfosContainerEl.querySelectorAll(".info")];
-    let currentIdx = infos.findIndex(i => i.classList.contains("current--info"));
-    
-    let nextIdx = direction === "right" ? (currentIdx + 1) % infos.length : (currentIdx - 1 + infos.length) % infos.length;
+    // Remover todas las clases de info
+    infos.forEach(info => {
+        info.classList.remove("current--info", "next--info", "previous--info");
+    });
+
+    const prevIndex = (currentIndex - 1 + totalCards) % totalCards;
+    const nextIndex = (currentIndex + 1) % totalCards;
 
     gsap.timeline()
-        .to([buttons.prev, buttons.next], { duration: 0.2, opacity: 0.5, pointerEvents: "none" })
-        .to(infos[currentIdx].querySelectorAll(".text"), { duration: 0.4, stagger: 0.1, translateY: "-120px", opacity: 0 })
-        .call(() => {
-            infos.forEach(i => i.classList.remove("current--info", "next--info", "previous--info"));
-            infos[nextIdx].classList.add("current--info");
+        .to([buttons.prev, buttons.next], {
+            duration: 0.2,
+            opacity: 0.5,
+            pointerEvents: "none",
         })
-        .fromTo(infos[nextIdx].querySelectorAll(".text"), 
-            { opacity: 0, translateY: "40px" }, 
-            { duration: 0.4, stagger: 0.1, translateY: "0px", opacity: 1 })
-        .to([buttons.prev, buttons.next], { duration: 0.2, opacity: 1, pointerEvents: "all" });
+        .to(
+            infos[currentIndex].querySelectorAll(".text"),
+            {
+                duration: 0.4,
+                stagger: 0.1,
+                translateY: "-120px",
+                opacity: 0,
+            },
+            "-="
+        )
+        .call(() => {
+            // Aplicar clases a los infos correctos
+            infos[currentIndex].classList.add("current--info");
+            infos[prevIndex].classList.add("previous--info");
+            infos[nextIndex].classList.add("next--info");
+        })
+        .call(() => initCardEvents())
+        .fromTo(
+            infos[currentIndex].querySelectorAll(".text"),
+            {
+                opacity: 0,
+                translateY: "40px",
+            },
+            {
+                duration: 0.4,
+                stagger: 0.1,
+                translateY: "0px",
+                opacity: 1,
+            }
+        )
+        .to([buttons.prev, buttons.next], {
+            duration: 0.2,
+            opacity: 1,
+            pointerEvents: "all",
+        });
 }
 
 function updateCard(e) {
-	const card = e.currentTarget;
-	const box = card.getBoundingClientRect();
-	const centerPosition = {
-		x: box.left + box.width / 2,
-		y: box.top + box.height / 2,
-	};
-	let angle = Math.atan2(e.pageX - centerPosition.x, 0) * (35 / Math.PI);
-	gsap.set(card, {
-		"--current-card-rotation-offset": `${angle}deg`,
-	});
-	const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
-	gsap.set(currentInfoEl, {
-		rotateY: `${angle}deg`,
-	});
+    const card = e.currentTarget;
+    const box = card.getBoundingClientRect();
+    const centerPosition = {
+        x: box.left + box.width / 2,
+        y: box.top + box.height / 2,
+    };
+    let angle = Math.atan2(e.pageX - centerPosition.x, 0) * (35 / Math.PI);
+    gsap.set(card, {
+        "--current-card-rotation-offset": `${angle}deg`,
+    });
+    const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
+    gsap.set(currentInfoEl, {
+        rotateY: `${angle}deg`,
+    });
 }
 
 function resetCardTransforms(e) {
-	const card = e.currentTarget;
-	const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
-	gsap.set(card, {
-		"--current-card-rotation-offset": 0,
-	});
-	gsap.set(currentInfoEl, {
-		rotateY: 0,
-	});
+    const card = e.currentTarget;
+    const currentInfoEl = cardInfosContainerEl.querySelector(".current--info");
+    gsap.set(card, {
+        "--current-card-rotation-offset": 0,
+    });
+    gsap.set(currentInfoEl, {
+        rotateY: 0,
+    });
 }
 
 function initCardEvents() {
-	const currentCardEl = cardsContainerEl.querySelector(".current--card");
-	currentCardEl.addEventListener("pointermove", updateCard);
-	currentCardEl.addEventListener("pointerout", (e) => {
-		resetCardTransforms(e);
-	});
+    const currentCardEl = cardsContainerEl.querySelector(".current--card");
+    if (currentCardEl) {
+        currentCardEl.addEventListener("pointermove", updateCard);
+        currentCardEl.addEventListener("pointerout", (e) => {
+            resetCardTransforms(e);
+        });
+    }
 }
 
 initCardEvents();
 
-function removeCardEvents(card) {
-	card.removeEventListener("pointermove", updateCard);
-}
-
-function init() {
-
-	let tl = gsap.timeline();
-
-	tl.to(cardsContainerEl.children, {
-		delay: 0.15,
-		duration: 0.5,
-		stagger: {
-			ease: "power4.inOut",
-			from: "right",
-			amount: 0.1,
-		},
-		"--card-translateY-offset": "0%",
-	})
-		.to(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
-		delay: 0.5,
-		duration: 0.4,
-		stagger: 0.1,
-		opacity: 1,
-		translateY: 0,
-	})
-		.to(
-		[buttons.prev, buttons.next],
-		{
-			duration: 0.4,
-			opacity: 1,
-			pointerEvents: "all",
-		},
-		"-=0.4"
-	);
-}
-
-const waitForImages = () => {
-	const images = [...document.querySelectorAll("img")];
-	const totalImages = images.length;
-	let loadedImages = 0;
-	const loaderEl = document.querySelector(".loader span");
-
-	gsap.set(cardsContainerEl.children, {
-		"--card-translateY-offset": "100vh",
-	});
-	gsap.set(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
-		translateY: "40px",
-		opacity: 0,
-	});
-	gsap.set([buttons.prev, buttons.next], {
-		pointerEvents: "none",
-		opacity: "0",
-	});
-
-	images.forEach((image) => {
-		imagesLoaded(image, (instance) => {
-			if (instance.isComplete) {
-				loadedImages++;
-				let loadProgress = loadedImages / totalImages;
-
-				gsap.to(loaderEl, {
-					duration: 1,
-					scaleX: loadProgress,
-					backgroundColor: `hsl(${loadProgress * 120}, 100%, 50%`,
-				});
-
-				if (totalImages == loadedImages) {
-					gsap.timeline()
-						.to(".loading__wrapper", {
-						duration: 0.8,
-						opacity: 0,
-						pointerEvents: "none",
-					})
-						.call(() => init());
-				}
-			}
-		});
-	});
-};
+// Animación inicial
+gsap.to(cardsContainerEl.children, {
+    delay: 0.15,
+    duration: 0.5,
+    stagger: {
+        ease: "power4.inOut",
+        from: "right",
+        amount: 0.1,
+    },
+    "--card-translateY-offset": "0%",
+})
+.to(cardInfosContainerEl.querySelector(".current--info").querySelectorAll(".text"), {
+    delay: 0.5,
+    duration: 0.4,
+    stagger: 0.1,
+    opacity: 1,
+    translateY: 0,
+})
+.to([buttons.prev, buttons.next], {
+    duration: 0.4,
+    opacity: 1,
+    pointerEvents: "all",
+}, "-=0.4");
