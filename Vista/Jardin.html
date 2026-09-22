@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FFD97D">
+<title>Flores Amarillas 🌻</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --marron: #5a3e00;
+  --marron-suave: #7a5a1a;
+  --crema: #fffdf5;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
+  color: var(--marron);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ================= Cielo ================= */
+
+#campo {
+  position: fixed;
+  inset: 0;
+  cursor: pointer;
+  background: linear-gradient(180deg,
+      #FFF6D0 0%,
+      #FFE9A0 32%,
+      #FFD97D 58%,
+      #FFC24D 78%,
+      #FFAD33 100%);
+}
+
+/* Sol */
+#campo::before {
+  content: "";
+  position: absolute;
+  top: 7%;
+  right: 12%;
+  width: 22vw;
+  max-width: 120px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #FFFBE0 0%, #FFE066 45%, #FFC93C 100%);
+  box-shadow: 0 0 60px 20px rgba(255, 214, 102, 0.55);
+  animation: respirar 7s ease-in-out infinite;
+}
+
+@keyframes respirar {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+/* Nubes suaves */
+.nube {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 100px;
+  filter: blur(1px);
+  pointer-events: none;
+  animation: flotar linear infinite;
+}
+
+@keyframes flotar {
+  from { transform: translateX(-30vw); }
+  to   { transform: translateX(130vw); }
+}
+
+/* Suelo */
+#suelo {
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  bottom: -2%;
+  height: 36%;
+  border-radius: 50% 50% 0 0 / 20% 20% 0 0;
+  background: linear-gradient(180deg, #74C24C 0%, #4C8C3A 48%, #24501A 100%);
+  pointer-events: none;
+}
+
+/* ================= Interfaz ================= */
+
+.barra {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.barra > * { pointer-events: auto; }
+
+.volver {
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--marron);
+  background: rgba(255, 253, 245, 0.82);
+  border: 1px solid rgba(90, 62, 0, 0.16);
+  border-radius: 100px;
+  padding: 9px 18px;
+  min-height: 44px;
+  text-decoration: none;
+  backdrop-filter: blur(6px);
+}
+
+.contador {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--marron);
+  background: rgba(255, 253, 245, 0.82);
+  border: 1px solid rgba(90, 62, 0, 0.16);
+  border-radius: 100px;
+  padding: 9px 18px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  backdrop-filter: blur(6px);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pista inicial */
+.pista {
+  position: fixed;
+  left: 50%;
+  bottom: 46%;
+  transform: translateX(-50%);
+  background: rgba(255, 253, 245, 0.92);
+  border-radius: 100px;
+  padding: 11px 22px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 8px 22px -10px rgba(90, 62, 0, 0.6);
+  z-index: 35;
+  animation: palpitar 2s ease-in-out infinite;
+  transition: opacity 0.5s ease;
+}
+
+.pista.oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes palpitar {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50%      { transform: translateX(-50%) scale(1.05); }
+}
+
+/* Mensaje de la última flor (va arriba del reproductor) */
+.mensaje {
+  position: fixed;
+  left: 50%;
+  bottom: calc(60px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(440px, calc(100vw - 28px));
+  background: rgba(255, 253, 245, 0.96);
+  border: 1px solid rgba(90, 62, 0, 0.14);
+  border-radius: 18px;
+  padding: 16px 20px;
+  box-shadow: 0 14px 34px -14px rgba(90, 62, 0, 0.75);
+  backdrop-filter: blur(8px);
+  text-align: center;
+  z-index: 38;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.mensaje.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.mensaje .nombre-flor {
+  display: block;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #C77800;
+  margin-bottom: 4px;
+}
+
+.mensaje .texto {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #4a3400;
+}
+
+/* ================= Las flores ================= */
+
+.flor {
+  position: absolute;
+  width: 76px;
+  height: 138px;
+  margin-left: -38px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.flor__crece {
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  animation: crecer 0.9s cubic-bezier(0.34, 1.45, 0.5, 1) forwards;
+}
+
+@keyframes crecer {
+  0%   { transform: scaleY(0) scaleX(0.55); opacity: 0; }
+  55%  { opacity: 1; }
+  70%  { transform: scaleY(1.07) scaleX(1); }
+  100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+}
+
+.flor__mecer {
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+  animation: mecer 3.8s var(--retardo, 0s) ease-in-out infinite;
+}
+
+@keyframes mecer {
+  0%, 100% { transform: rotate(-2.2deg); }
+  50%      { transform: rotate(2.2deg); }
+}
+
+.flor svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 3px 3px rgba(60, 90, 20, 0.22));
+}
+
+/* ================= Pantalla final ================= */
+
+.final {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(90, 62, 0, 0.55);
+  backdrop-filter: blur(5px);
+  z-index: 70;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.final.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.final__caja {
+  width: min(430px, 100%);
+  background: var(--crema);
+  border-radius: 22px;
+  padding: 30px 24px;
+  box-shadow: 0 24px 50px -18px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  transform: scale(0.9);
+  transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+
+.final.visible .final__caja { transform: scale(1); }
+
+.final__emoji { font-size: 3.2rem; line-height: 1; }
+
+.final__titulo {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(1.9rem, 8vw, 2.4rem);
+  color: #C77800;
+  margin: 10px 0 12px;
+  line-height: 1.2;
+}
+
+.final__texto {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #4a3400;
+  margin: 0 0 8px;
+}
+
+.final__firma {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.45rem;
+  color: #C77800;
+  margin: 16px 0 24px;
+}
+
+.boton {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #FFC93C 0%, #F08C00 100%);
+  border: 0;
+  border-radius: 100px;
+  padding: 15px 32px;
+  min-height: 52px;
+  cursor: pointer;
+  box-shadow: 0 10px 24px -10px rgba(240, 140, 0, 0.95);
+  transition: transform 0.16s ease;
+}
+
+.boton:active { transform: scale(0.96); }
+
+.boton--fantasma {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1.5px solid rgba(90, 62, 0, 0.25);
+  color: var(--marron);
+  box-shadow: none;
+  font-size: 0.95rem;
+  padding: 13px 28px;
+  min-height: 48px;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.acciones {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+
+/* ================= Música =================
+   Va arriba, junto al contador: abajo el mensaje ocupa todo el ancho. */
+
+.barra__der {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.musica {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: var(--marron);
+  background: rgba(255, 253, 245, 0.82);
+  border: 1px solid rgba(90, 62, 0, 0.16);
+  border-radius: 50%;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.musica:active { transform: scale(0.92); }
+
+.musica.sonando {
+  background: linear-gradient(135deg, #FFE066, #FFC93C);
+  border-color: rgba(90, 62, 0, 0.32);
+}
+
+.musica:not(.sonando) {
+  animation: llamar 2.4s ease-in-out infinite;
+}
+
+@keyframes llamar {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 140, 0, 0.55); }
+  50%      { box-shadow: 0 0 0 9px rgba(240, 140, 0, 0); }
+}
+</style>
+</head>
+<body>
+
+<div id="campo">
+  <div class="nube" style="top:14%; width:110px; height:38px; animation-duration:52s;"></div>
+  <div class="nube" style="top:26%; width:76px;  height:28px; animation-duration:74s; animation-delay:-20s;"></div>
+  <div class="nube" style="top:6%;  width:140px; height:44px; animation-duration:96s; animation-delay:-55s;"></div>
+  <div id="suelo"></div>
+</div>
+
+<div class="barra">
+  <a class="volver" href="/index.html">‹ Inicio</a>
+  <div class="barra__der">
+    <span class="contador" id="contador">🌻 0 / 8</span>
+    <button class="musica" type="button" id="btn-musica" aria-label="Poner música">🎵</button>
+  </div>
+</div>
+
+<div class="pista" id="pista">Toca el jardín para sembrar 🌱</div>
+
+<div class="mensaje" id="mensaje">
+  <span class="nombre-flor" id="nombre-flor"></span>
+  <p class="texto" id="texto-mensaje"></p>
+</div>
+
+<div class="final" id="final">
+  <div class="final__caja">
+    <span class="final__emoji">🌻</span>
+    <h2 class="final__titulo" id="final-titulo">Tu jardín está completo</h2>
+    <p class="final__texto" id="final-texto"></p>
+    <p class="final__firma">Con cariño, Sebastián.</p>
+    <div class="acciones">
+      <button class="boton" type="button" id="btn-repetir">Sembrar otra vez 🌱</button>
+      <a class="boton boton--fantasma" href="/index.html">Volver al inicio</a>
+    </div>
+  </div>
+</div>
+
+<audio id="musica" loop preload="none"
+       src="/controlador/Floricienta — Flores Amarillas [Letra].mp3"></audio>
+
+<script>
+/* ============================================================
+   1. Los tipos de flor (se dibujan con SVG, sin imágenes)
+   ============================================================ */
+const TIPOS = {
+  girasol:    { nombre: 'Girasol',    petalos: 12, rx: 8.5, ry: 21, dist: 27, petalo: '#FFC107', borde: '#F9A825', centro: '#6D4C41', rCentro: 15 },
+  margarita:  { nombre: 'Margarita',  petalos: 9,  rx: 5,   ry: 22, dist: 28, petalo: '#FFE082', borde: '#FFD54F', centro: '#F9A825', rCentro: 11 },
+  crisantemo: { nombre: 'Crisantemo', petalos: 18, rx: 5.5, ry: 15, dist: 21, petalo: '#FFD54F', borde: '#FFC107', centro: '#EF6C00', rCentro: 9  },
+  boton:      { nombre: 'Botón de oro', petalos: 6, rx: 11, ry: 17, dist: 17, petalo: '#FFCA28', borde: '#FFB300', centro: '#F57F17', rCentro: 8  }
+};
+
+/* Dibuja una flor completa: tallo, hojas y cabeza */
+function dibujarFlor(nombreTipo, semilla) {
+  const t = TIPOS[nombreTipo];
+  const centroX = 50, centroY = 56;
+
+  // Pétalos repartidos en círculo, con un pequeño desfase para que se vean orgánicos
+  const desfase = (semilla * 13) % 360;
+  let petalos = '';
+  for (let i = 0; i < t.petalos; i++) {
+    const angulo = (360 / t.petalos) * i + desfase;
+    petalos += `<ellipse cx="${centroX}" cy="${centroY - t.dist}" rx="${t.rx}" ry="${t.ry}" `
+             + `fill="${t.petalo}" stroke="${t.borde}" stroke-width="0.8" `
+             + `transform="rotate(${angulo.toFixed(1)} ${centroX} ${centroY})"/>`;
+  }
+
+  // Tallo ligeramente curvado, distinto en cada flor
+  const curva = ((semilla % 5) - 2) * 3;
+  const tallo = `<path d="M50 176 Q${50 + curva} 118 50 ${centroY + 4}" `
+              + `fill="none" stroke="#4E8B3A" stroke-width="4.5" stroke-linecap="round"/>`;
+
+  const hojaIzq = `<ellipse cx="33" cy="122" rx="15" ry="6.5" fill="#5FA84A" `
+                + `transform="rotate(-30 33 122)"/>`;
+  const hojaDer = `<ellipse cx="67" cy="144" rx="14" ry="6" fill="#6FBF4A" `
+                + `transform="rotate(30 67 144)"/>`;
+
+  return `<svg viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      ${tallo}${hojaIzq}${hojaDer}
+      ${petalos}
+      <circle cx="${centroX}" cy="${centroY}" r="${t.rCentro}" fill="${t.centro}"/>
+      <circle cx="${centroX}" cy="${centroY}" r="${t.rCentro * 0.62}" fill="rgba(255,255,255,0.14)"/>
+    </svg>`;
+}
+
+/* ============================================================
+   2. Las 8 flores del jardín, cada una con su mensaje
+   ============================================================ */
+const JARDIN = [
+  { tipo: 'girasol',    msg: 'Los girasoles siempre buscan la luz. Me recuerdan a ti, que iluminas el día de quien tenga cerca.' },
+  { tipo: 'margarita',  msg: 'El año pasado no sabía qué flor darte. Este año te traje un jardín entero, para que no haya que escoger.' },
+  { tipo: 'crisantemo', msg: 'Los crisantemos amarillos dicen "corazón honesto y leal". Contigo aprendí que eso sí existe.' },
+  { tipo: 'boton',      msg: 'Cuidar la racha todos los días es como regar una flor: poquito, pero sin fallar nunca.' },
+  { tipo: 'girasol',    msg: 'Las flores amarillas se dan el 21 de septiembre. Yo te las quería dar también cualquier otro día.' },
+  { tipo: 'margarita',  msg: 'Gracias por la paciencia. Sé que a veces doy más trabajo que un jardín en invierno.' },
+  { tipo: 'crisantemo', msg: 'Cada flor de este jardín nació de un recuerdo tuyo. Y todavía me quedan muchísimos por sembrar.' },
+  { tipo: 'boton',      msg: 'Si algún día te sientes poquito, acuérdate de esto: alguien te sembró un jardín entero.' }
+];
+
+const MENSAJE_FINAL = 'Ocho flores, y un solo motivo detrás de todas: que hoy sonrías. '
+                    + 'Gracias por dejarme ser parte de tu vida, aunque sea desde una pantalla.';
+
+/* ============================================================
+   3. Lógica del jardín
+   ============================================================ */
+const campo     = document.getElementById('campo');
+const contador  = document.getElementById('contador');
+const pista     = document.getElementById('pista');
+const mensaje   = document.getElementById('mensaje');
+const elNombre  = document.getElementById('nombre-flor');
+const elTexto   = document.getElementById('texto-mensaje');
+const final     = document.getElementById('final');
+const btnRepetir = document.getElementById('btn-repetir');
+
+let sembradas = 0;
+let bloqueado = false;
+
+function actualizarContador() {
+  contador.textContent = `🌻 ${sembradas} / ${JARDIN.length}`;
+}
+
+function plantar(clientX, clientY) {
+  if (bloqueado || sembradas >= JARDIN.length) return;
+
+  const caja = campo.getBoundingClientRect();
+
+  // Posición horizontal donde tocó (con un pelín de azar para que no se encimen)
+  const xPct = ((clientX - caja.left) / caja.width) * 100;
+  const x = Math.min(Math.max(xPct + (Math.random() - 0.5) * 5, 6), 94);
+
+  // Posición vertical: se limita a la franja del suelo (para que no floten en el cielo)
+  const desdeAbajo = caja.bottom - clientY;
+  const minimo = caja.height * 0.13; // no muy abajo, que el mensaje no las tape
+  const maximo = caja.height * 0.30;
+  const y = Math.min(Math.max(desdeAbajo, minimo), maximo);
+
+  const datos = JARDIN[sembradas];
+  const semilla = sembradas + 1;
+
+  // Crear la flor
+  const flor = document.createElement('div');
+  flor.className = 'flor';
+  flor.style.left = `${x}%`;
+  flor.style.bottom = `${y}px`;
+  flor.style.zIndex = 10 + sembradas;
+
+  const crece = document.createElement('div');
+  crece.className = 'flor__crece';
+
+  const mecer = document.createElement('div');
+  mecer.className = 'flor__mecer';
+  mecer.style.setProperty('--retardo', `${(semilla % 5) * 0.4}s`);
+  mecer.innerHTML = dibujarFlor(datos.tipo, semilla);
+
+  crece.appendChild(mecer);
+  flor.appendChild(crece);
+  campo.appendChild(flor);
+
+  // Mostrar el mensaje de esa flor
+  elNombre.textContent = TIPOS[datos.tipo].nombre;
+  elTexto.textContent = datos.msg;
+  mensaje.classList.add('visible');
+
+  sembradas++;
+  actualizarContador();
+
+  if (sembradas === 1) pista.classList.add('oculto');
+
+  // ¿Ya se completó el jardín?
+  if (sembradas >= JARDIN.length) {
+    bloqueado = true;
+    setTimeout(mostrarFinal, 1500);
+  }
+}
+
+function mostrarFinal() {
+  document.getElementById('final-texto').textContent = MENSAJE_FINAL;
+  final.classList.add('visible');
+}
+
+function reiniciar() {
+  campo.querySelectorAll('.flor').forEach((f) => f.remove());
+  sembradas = 0;
+  bloqueado = false;
+  actualizarContador();
+  mensaje.classList.remove('visible');
+  final.classList.remove('visible');
+
+  // Limpiar la pista después de que termine la animación de salida
+  setTimeout(() => pista.classList.remove('oculto'), 400);
+}
+
+/* ============================================================
+   4. Eventos
+   ============================================================ */
+campo.addEventListener('pointerdown', (e) => {
+  // Si tocó un botón o enlace, no sembramos
+  if (e.target.closest('button, a')) return;
+  plantar(e.clientX, e.clientY);
+});
+
+btnRepetir.addEventListener('click', reiniciar);
+
+// Evitar el zoom por doble toque
+document.addEventListener('dblclick', (e) => e.preventDefault(), { passive: false });
+
+/* ============================================================
+   5. Música: el botón de arriba prende y apaga la canción
+   ============================================================ */
+const musica = document.getElementById('musica');
+const btnMusica = document.getElementById('btn-musica');
+
+btnMusica.addEventListener('click', (e) => {
+  e.stopPropagation(); // que tocar el botón no siembre una flor
+  if (musica.paused) {
+    musica.play().catch(() => {}); // si el navegador lo bloquea, no pasa nada
+  } else {
+    musica.pause();
+  }
+});
+
+musica.addEventListener('play', () => {
+  btnMusica.classList.add('sonando');
+  btnMusica.textContent = '🔊';
+  btnMusica.setAttribute('aria-label', 'Pausar música');
+});
+
+musica.addEventListener('pause', () => {
+  btnMusica.classList.remove('sonando');
+  btnMusica.textContent = '🎵';
+  btnMusica.setAttribute('aria-label', 'Poner música');
+});
+
+actualizarContador();
+</script>
+
+</body>
+</html>

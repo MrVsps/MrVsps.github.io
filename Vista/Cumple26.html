@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2a0f2b">
+<title>Felices 19, Cami</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --vino-1: #2a0f2b;
+  --vino-2: #4d1440;
+  --rosa: #ff6b9d;
+  --rosa-claro: #ffc2d8;
+  --dorado: #ffd54f;
+  --texto: #fff6fa;
+  --texto-suave: rgba(255, 246, 250, 0.68);
+  --cristal: rgba(255, 255, 255, 0.08);
+  --borde: rgba(255, 255, 255, 0.15);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 20px 16px calc(96px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--texto);
+  text-align: center;
+  overflow-x: hidden;
+  background:
+    radial-gradient(110% 70% at 50% 0%, var(--vino-2) 0%, transparent 62%),
+    linear-gradient(170deg, #3d1136 0%, var(--vino-1) 100%);
+  background-attachment: fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* margin auto en vez de justify-content: center — así, cuando la carta es más
+   alta que la pantalla, no se recorta por arriba ni queda debajo del audio */
+.pantalla {
+  width: 100%;
+  max-width: 520px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.pantalla[hidden] { display: none; }
+
+/* ---------------- Volver ---------------- */
+
+.volver {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  background: var(--cristal);
+  border: 1px solid var(--borde);
+  border-radius: 100px;
+  padding: 9px 18px;
+  min-height: 44px;
+  text-decoration: none;
+  z-index: 60;
+  backdrop-filter: blur(6px);
+}
+
+/* ---------------- Títulos ---------------- */
+
+.titulo {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2.1rem, 10vw, 3rem);
+  font-weight: 700;
+  line-height: 1.12;
+  margin: 0 0 8px;
+  background: linear-gradient(100deg, var(--rosa) 5%, #fff0f6 45%, var(--dorado) 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.instruccion {
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+  margin: 0 0 26px;
+}
+
+/* ---------------- Pastel ---------------- */
+
+.pastel {
+  position: relative;
+  width: min(290px, 80vw);
+  margin: 0 auto;
+  padding-top: 78px;
+}
+
+/* --- Velas --- */
+.velas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 78px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 15px;
+}
+
+.vela {
+  position: relative;
+  width: 11px;
+  height: 56px;
+  border: 0;
+  padding: 0;
+  border-radius: 5px 5px 2px 2px;
+  background: repeating-linear-gradient(
+      45deg,
+      #fff 0px, #fff 5px,
+      var(--rosa) 5px, var(--rosa) 10px);
+  cursor: pointer;
+  transition: filter 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vela::after { /* pabilo */
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 7px;
+  border-radius: 2px;
+  background: #4a3b2a;
+}
+
+.llama {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 21px;
+  border-radius: 50% 50% 50% 50% / 66% 66% 34% 34%;
+  background: radial-gradient(ellipse at 50% 78%, #fffde3 0%, #ffe066 32%, #ffa726 66%, #ff5722 100%);
+  box-shadow: 0 0 16px 6px rgba(255, 167, 38, 0.6),
+              0 0 40px 14px rgba(255, 111, 0, 0.25);
+  animation: flamear 0.45s ease-in-out infinite alternate;
+  transition: opacity 0.28s ease, transform 0.28s ease;
+  pointer-events: none;
+}
+
+@keyframes flamear {
+  from { transform: translateX(-50%) scale(1) rotate(-2.5deg); }
+  to   { transform: translateX(-50%) scale(1.13) rotate(2.5deg); }
+}
+
+/* Vela apagada */
+.vela.apagada { filter: brightness(0.72); }
+.vela.apagada .llama {
+  opacity: 0;
+  transform: translateX(-50%) scale(0.2) translateY(-14px);
+  animation: none;
+}
+
+/* Humito al apagar */
+.humo {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(220, 220, 220, 0.55);
+  filter: blur(3px);
+  pointer-events: none;
+  animation: subirHumo 1.15s ease-out forwards;
+}
+
+@keyframes subirHumo {
+  0%   { opacity: 0.75; transform: translate(-50%, 0) scale(0.6); }
+  100% { opacity: 0;    transform: translate(-50%, -52px) scale(2.4); }
+}
+
+/* --- Cuerpo del pastel --- */
+.pastel__cuerpo {
+  position: relative;
+  height: 106px;
+  border-radius: 10px 10px 8px 8px;
+  background: linear-gradient(180deg, #ffe0b2 0%, #ffcc80 55%, #e6a253 100%);
+  box-shadow: inset 0 -12px 24px -12px rgba(120, 60, 10, 0.55);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+/* Glaseado que gotea */
+.pastel__cuerpo::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34px;
+  background: linear-gradient(180deg, var(--rosa-claro) 0%, #ff9ec4 100%);
+  border-radius: 10px 10px 40% 40% / 10px 10px 26px 26px;
+  box-shadow: 0 8px 0 -2px #ff9ec4;
+}
+
+.pastel__edad {
+  position: relative;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.9rem;
+  font-weight: 700;
+  color: #a01550;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  margin-top: 16px;
+}
+
+/* Base / plato */
+.pastel__plato {
+  height: 14px;
+  border-radius: 0 0 14px 14px;
+  background: linear-gradient(180deg, #d9d9e3 0%, #9a9aae 100%);
+  box-shadow: 0 10px 26px -10px rgba(0, 0, 0, 0.8);
+}
+
+.progreso {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  margin: 22px 0 0;
+  min-height: 1.4em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------- Confeti ---------------- */
+
+.confeti {
+  position: fixed;
+  top: -24px;
+  border-radius: 2px;
+  z-index: 90;
+  pointer-events: none;
+  animation: caer linear forwards;
+}
+
+@keyframes caer {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(108vh) rotate(760deg); opacity: 0.85; }
+}
+
+/* ---------------- La carta ---------------- */
+
+.carta {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--borde);
+  border-radius: 22px;
+  padding: 28px 22px;
+  backdrop-filter: blur(10px);
+  animation: entrar 0.7s cubic-bezier(0.34, 1.3, 0.5, 1);
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(26px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.carta__emoji { font-size: 2.8rem; line-height: 1; display: block; }
+
+.carta__texto {
+  font-size: 1rem;
+  line-height: 1.72;
+  color: var(--texto-suave);
+  text-align: left;
+  margin: 18px 0 0;
+}
+
+.carta__texto b { color: var(--rosa-claro); }
+
+.carta__firma {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  color: var(--dorado);
+  margin: 24px 0 0;
+  text-align: right;
+}
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #4a1020;
+  background: linear-gradient(135deg, var(--rosa-claro) 0%, var(--rosa) 100%);
+  border: 0;
+  border-radius: 100px;
+  padding: 15px 32px;
+  min-height: 52px;
+  margin-top: 26px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 10px 26px -10px rgba(255, 107, 157, 0.95);
+  transition: transform 0.16s ease;
+}
+
+.boton:active { transform: scale(0.96); }
+
+/* ---------------- Música ----------------
+   Botón pequeño en la esquina en vez de la barra nativa de <audio>:
+   en celular esa barra ocupa todo el ancho y tapa los botones de abajo. */
+
+.musica {
+  position: fixed;
+  right: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--borde);
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  z-index: 55;
+  transition: transform 0.2s ease, background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.musica:active { transform: scale(0.92); }
+
+.musica.sonando {
+  background: linear-gradient(135deg, var(--rosa-claro), var(--rosa));
+  color: #4a1020;
+}
+
+.musica:not(.sonando) {
+  animation: llamar 2.4s ease-in-out infinite;
+}
+
+@keyframes llamar {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.5); }
+  50%      { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 107, 157, 0); }
+}
+</style>
+</head>
+<body>
+
+<a class="volver" href="/index.html">‹ Inicio</a>
+
+<!-- ============ PANTALLA 1: EL PASTEL ============ -->
+<section class="pantalla" id="pantalla-pastel">
+  <h1 class="titulo">¡Felices 19, Cami!</h1>
+  <p class="instruccion">Toca cada vela para apagarla 🕯️</p>
+
+  <div class="pastel">
+    <div class="velas" id="velas"></div>
+    <div class="pastel__cuerpo">
+      <span class="pastel__edad">19</span>
+    </div>
+    <div class="pastel__plato"></div>
+  </div>
+
+  <p class="progreso" id="progreso"></p>
+</section>
+
+<!-- ============ PANTALLA 2: LA CARTA ============ -->
+<section class="pantalla" id="pantalla-carta" hidden>
+  <div class="carta">
+    <span class="carta__emoji">🎂</span>
+    <h1 class="titulo">¡Felices 19, Cami!</h1>
+
+    <!-- ✏️ PERSONALIZA AQUÍ: este es el texto de la carta -->
+    <p class="carta__texto">
+      Otro año, otra vuelta al sol, y otra vez me toca escribirte algo que no me cabe
+      en una sola frase.
+      <br><br>
+      El año pasado te di 100 consejos, así que hoy no me voy a repetir. Mejor te digo
+      lo importante: <b>verte crecer ha sido uno de los mejores regalos que me llevo.</b>
+      <br><br>
+      Cumplir 19 no es como cumplir 18. A los 18 todo era empezar; a los 19 ya llevas
+      un año entero siendo la persona en la que te estás convirtiendo. Y esa persona
+      me gusta mucho.
+      <br><br>
+      Gracias por dejarme estar, aunque sea desde una pantalla. Ojalá este año te traiga
+      todo lo que estás buscando — y un poquito más.
+    </p>
+
+    <!-- ✏️ PERSONALIZA AQUÍ: tu firma -->
+    <p class="carta__firma">Con cariño,<br>Sebastián.</p>
+
+    <a class="boton" href="/index.html">Volver al inicio 💫</a>
+  </div>
+</section>
+
+<audio id="musica" loop preload="none"
+       src="/controlador/ytmp3free.cc_hestia-destripando-la-historia-letra-youtubemp3free.org.mp3"></audio>
+<button class="musica" type="button" id="btn-musica" aria-label="Poner música">🎵</button>
+
+<script>
+/* ============================================================
+   Configuración
+   ============================================================ */
+const NUM_VELAS = 6;   // cuántas velas tiene el pastel
+
+/* ============================================================
+   Construir las velas
+   ============================================================ */
+const contenedorVelas = document.getElementById('velas');
+const progreso = document.getElementById('progreso');
+const pantallaPastel = document.getElementById('pantalla-pastel');
+const pantallaCarta = document.getElementById('pantalla-carta');
+
+let apagadas = 0;
+
+for (let i = 0; i < NUM_VELAS; i++) {
+  const vela = document.createElement('button');
+  vela.type = 'button';
+  vela.className = 'vela';
+  vela.setAttribute('aria-label', `Apagar vela ${i + 1}`);
+  vela.innerHTML = '<span class="llama"></span>';
+  vela.addEventListener('click', () => apagar(vela));
+  contenedorVelas.appendChild(vela);
+}
+
+function actualizarProgreso() {
+  const quedan = NUM_VELAS - apagadas;
+  progreso.textContent = quedan > 0
+    ? `Te quedan ${quedan} ${quedan === 1 ? 'vela' : 'velas'}`
+    : '¡Pide un deseo! ✨';
+}
+
+/* ============================================================
+   Apagar una vela
+   ============================================================ */
+function apagar(vela) {
+  if (vela.classList.contains('apagada')) return;
+
+  vela.classList.add('apagada');
+
+  // Humito
+  const humo = document.createElement('span');
+  humo.className = 'humo';
+  vela.appendChild(humo);
+  setTimeout(() => humo.remove(), 1200);
+
+  apagadas++;
+  actualizarProgreso();
+
+  if (apagadas === NUM_VELAS) {
+    setTimeout(felicitar, 650);
+  }
+}
+
+/* ============================================================
+   Confeti + carta
+   ============================================================ */
+function felicitar() {
+  lanzarConfeti(90);
+  pantallaPastel.hidden = true;
+  pantallaCarta.hidden = false;
+  window.scrollTo({ top: 0, behavior: 'instant' });
+
+  setTimeout(() => lanzarConfeti(60), 1400);
+}
+
+function lanzarConfeti(cantidad) {
+  const colores = ['#FFC93C', '#FF6B9D', '#7ED957', '#64B5F6', '#BA68C8', '#FF8A65', '#FFF176'];
+
+  for (let i = 0; i < cantidad; i++) {
+    const c = document.createElement('i');
+    c.className = 'confeti';
+    c.style.left = `${Math.random() * 100}vw`;
+    c.style.background = colores[i % colores.length];
+    c.style.width = `${5 + Math.random() * 6}px`;
+    c.style.height = `${9 + Math.random() * 9}px`;
+    c.style.animationDelay = `${Math.random() * 1.1}s`;
+    c.style.animationDuration = `${2.6 + Math.random() * 2}s`;
+
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 6000);
+  }
+}
+
+actualizarProgreso();
+
+/* ============================================================
+   Música: el botón de la esquina prende y apaga la canción
+   ============================================================ */
+const musica = document.getElementById('musica');
+const btnMusica = document.getElementById('btn-musica');
+
+btnMusica.addEventListener('click', () => {
+  if (musica.paused) {
+    musica.play().catch(() => {}); // si el navegador lo bloquea, no pasa nada
+  } else {
+    musica.pause();
+  }
+});
+
+musica.addEventListener('play', () => {
+  btnMusica.classList.add('sonando');
+  btnMusica.textContent = '🔊';
+  btnMusica.setAttribute('aria-label', 'Pausar música');
+});
+
+musica.addEventListener('pause', () => {
+  btnMusica.classList.remove('sonando');
+  btnMusica.textContent = '🎵';
+  btnMusica.setAttribute('aria-label', 'Poner música');
+});
+</script>
+
+</body>
+</html>

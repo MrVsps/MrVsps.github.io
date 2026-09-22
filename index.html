@@ -2,74 +2,178 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1a0f2e">
     <title>Detallito Especial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/controlador/styles.css">
     <script src="/controlador/script.js" defer></script>
-
-    
 </head>
 <body>
 
-    <nav class="menu-nav">
-        <button onclick="mostrarSeccion('flores')">🌻 Flores</button>
-        <button onclick="mostrarSeccion('aniversario')">👑 Aniversario</button>
-        <button onclick="mostrarSeccion('cumple')">🎂 Cumpleaños</button>
+    <header class="cabecera">
+        <p class="cabecera__sobre">Para ti</p>
+        <h1 class="cabecera__titulo">Detallito Especial</h1>
+    </header>
+
+    <!-- Selector de año -->
+    <nav class="year-nav" aria-label="Elegir año">
+        <button class="year-btn is-active" data-year="2026" type="button">2026</button>
+        <button class="year-btn" data-year="2025" type="button">2025</button>
     </nav>
 
-    <div class="container">
+    <main class="container">
 
-        <div id="seccion-flores" class="content-section">
-            <h1>Flores Amarillas</h1>
-            <img src="https://plus.unsplash.com/premium_photo-1683547021301-a22fe13b0aa6?auto=format&fit=crop&q=60&w=600" alt="Flores Amarillas" class="flower-image">
-            
-            <div id="countdown-flores" class="countdown">
-                <div><span id="hours-flores">00</span><p>Horas</p></div>
-                <div><span id="minutes-flores">00</span><p>Minutos</p></div>
-                <div><span id="seconds-flores">00</span><p>Segundos</p></div>
+        <!-- ===================== MENÚ POR AÑOS ===================== -->
+        <div id="hub">
+
+            <div class="card-grid" id="grid-2026">
+                <button class="gift-card gift-card--cumple" type="button" onclick="abrirSeccion('cumple26')">
+                    <span class="gift-card__emoji">🎂</span>
+                    <span class="gift-card__titulo">Tu Cumpleaños</span>
+                    <span class="gift-card__sub">20 de Diciembre</span>
+                </button>
+
+                <button class="gift-card gift-card--amistad" type="button" onclick="abrirSeccion('amistad')">
+                    <span class="gift-card__emoji">💛</span>
+                    <span class="gift-card__titulo">Amor y Amistad</span>
+                    <span class="gift-card__sub">Un juego para ti</span>
+                </button>
+
+                <button class="gift-card gift-card--flores" type="button" onclick="abrirSeccion('flores26')">
+                    <span class="gift-card__emoji">🌻</span>
+                    <span class="gift-card__titulo">Flores Amarillas</span>
+                    <span class="gift-card__sub">Siembra tu jardín</span>
+                </button>
             </div>
 
-            <h2 id="final-msg-flores" style="display:none; color:#ffeb3b;">¡Ya llegaron tus flores amarillas! 🌻</h2>
-            <button id="btn-flores" class="main-btn" style="display:none;" onclick="location.href='/Vista/Libro.html'">
-                Ir a recibir 📖
-            </button>
-        </div>
+            <div class="card-grid" id="grid-2025" hidden>
+                <button class="gift-card gift-card--flores" type="button" onclick="abrirSeccion('flores')">
+                    <span class="gift-card__emoji">🌻</span>
+                    <span class="gift-card__titulo">Flores</span>
+                    <span class="gift-card__sub">El libro del año pasado</span>
+                </button>
 
-        <div id="seccion-aniversario" class="content-section" style="display:none;">
-            <h1>Nuestro Aniversario</h1>
-            <h2>Contando las horas para celebrar...</h2>
-            <img src="/controlador/Aniversario.jpeg" alt="Aniversario" class="flower-image">
-            
-            <div id="countdown-aniversario" class="countdown">
-                <div><span id="hours-aniversario">00</span><p>Horas</p></div>
-                <div><span id="minutes-aniversario">00</span><p>Minutos</p></div>
-                <div><span id="seconds-aniversario">00</span><p>Segundos</p></div>
+                <button class="gift-card gift-card--aniversario" type="button" onclick="abrirSeccion('aniversario')">
+                    <span class="gift-card__emoji">👑</span>
+                    <span class="gift-card__titulo">Aniversario</span>
+                    <span class="gift-card__sub">Nuestra historia</span>
+                </button>
+
+                <button class="gift-card gift-card--cumple" type="button" onclick="abrirSeccion('cumple')">
+                    <span class="gift-card__emoji">🎂</span>
+                    <span class="gift-card__titulo">Cumpleaños</span>
+                    <span class="gift-card__sub">Los 18</span>
+                </button>
             </div>
 
-            <h2 id="final-msg-aniversario" style="display:none; color:#ff4081;">¡Feliz Aniversario, querida amiga!</h2>
-            <button id="btn-aniversario" class="main-btn" style="display:none;" onclick="location.href='/Vista/Aniversario.html'">
-                Nuestra Historia 🌹
-            </button>
         </div>
 
-        <div id="seccion-cumple" class="content-section" style="display:none;">
-            <h1>Tu Cumpleaños</h1>
-            <h2>Casi es hora de soplar las velas...</h2>
-            <img src="/controlador/Cumpleaños.jpeg" alt="Cumpleaños" class="flower-image">
-            
-            <div id="countdown-cumple" class="countdown">
-                <div><span id="hours-cumple">00</span><p>Horas</p></div>
-                <div><span id="minutes-cumple">00</span><p>Minutos</p></div>
-                <div><span id="seconds-cumple">00</span><p>Segundos</p></div>
-            </div>
+        <!-- ===================== DETALLE DE CADA SECCIÓN ===================== -->
+        <div id="detalle" hidden>
+            <button class="back-btn" type="button" onclick="volverAlMenu()">‹ Volver</button>
 
-            <h2 id="final-msg-cumple" style="display:none; color:#00e5ff;">¡Feliz Cumpleaños! 🎂</h2>
-            <button id="btn-cumple" class="main-btn" style="display:none;" onclick="location.href='/Vista/Cumple.html'">
-                Abrir Regalo 🎁
-            </button>
+            <!-- ---------- 2026: Cumpleaños ---------- -->
+            <section id="seccion-cumple26" class="content-section">
+                <h2 class="sec-titulo">Tu Cumpleaños</h2>
+                <p class="sec-sub">Contando los días para celebrarte otra vez...</p>
+                <img src="/controlador/Cumpleaños.jpeg" alt="Cumpleaños" class="sec-imagen">
+
+                <div id="countdown-cumple26" class="countdown">
+                    <div><span id="days-cumple26">00</span><p>Días</p></div>
+                    <div><span id="hours-cumple26">00</span><p>Horas</p></div>
+                    <div><span id="minutes-cumple26">00</span><p>Minutos</p></div>
+                    <div><span id="seconds-cumple26">00</span><p>Segundos</p></div>
+                </div>
+
+                <h3 id="final-msg-cumple26" class="final-msg" style="display:none;">¡Feliz Cumpleaños! 🎂</h3>
+                <button id="btn-cumple26" class="main-btn" style="display:none;" type="button" onclick="location.href='/Vista/Cumple26.html'">
+                    Abrir Regalo 🎁
+                </button>
+            </section>
+
+            <!-- ---------- 2026: Amor y Amistad ---------- -->
+            <section id="seccion-amistad" class="content-section">
+                <h2 class="sec-titulo">Amor y Amistad</h2>
+                <p class="sec-sub">Hoy no hay cuenta regresiva, hay algo que jugar 💛</p>
+                <img src="/controlador/Aniversario.jpeg" alt="Amor y Amistad" class="sec-imagen">
+
+                <button class="main-btn" type="button" onclick="location.href='/Vista/AmorYAmistad.html'">
+                    Jugar 💛
+                </button>
+            </section>
+
+            <!-- ---------- 2026: Flores Amarillas ---------- -->
+            <section id="seccion-flores26" class="content-section">
+                <h2 class="sec-titulo">Flores Amarillas</h2>
+                <p class="sec-sub">Te regalo un jardín que solo florece cuando lo tocas 🌻</p>
+                <img src="https://plus.unsplash.com/premium_photo-1683547021301-a22fe13b0aa6?auto=format&fit=crop&q=60&w=600" alt="Flores Amarillas" class="sec-imagen">
+
+                <button class="main-btn" type="button" onclick="location.href='/Vista/Jardin.html'">
+                    Sembrar 🌻
+                </button>
+            </section>
+
+            <!-- ---------- 2025: Flores (libro) ---------- -->
+            <section id="seccion-flores" class="content-section">
+                <h2 class="sec-titulo">Flores Amarillas</h2>
+                <img src="https://plus.unsplash.com/premium_photo-1683547021301-a22fe13b0aa6?auto=format&fit=crop&q=60&w=600" alt="Flores Amarillas" class="sec-imagen">
+
+                <div id="countdown-flores" class="countdown">
+                    <div><span id="hours-flores">00</span><p>Horas</p></div>
+                    <div><span id="minutes-flores">00</span><p>Minutos</p></div>
+                    <div><span id="seconds-flores">00</span><p>Segundos</p></div>
+                </div>
+
+                <h3 id="final-msg-flores" class="final-msg" style="display:none;">¡Ya llegaron tus flores amarillas! 🌻</h3>
+                <button id="btn-flores" class="main-btn" style="display:none;" type="button" onclick="location.href='/Vista/Libro.html'">
+                    Ir a recibir 📖
+                </button>
+            </section>
+
+            <!-- ---------- 2025: Aniversario ---------- -->
+            <section id="seccion-aniversario" class="content-section">
+                <h2 class="sec-titulo">Nuestro Aniversario</h2>
+                <p class="sec-sub">Contando las horas para celebrar...</p>
+                <img src="/controlador/Aniversario.jpeg" alt="Aniversario" class="sec-imagen">
+
+                <div id="countdown-aniversario" class="countdown">
+                    <div><span id="hours-aniversario">00</span><p>Horas</p></div>
+                    <div><span id="minutes-aniversario">00</span><p>Minutos</p></div>
+                    <div><span id="seconds-aniversario">00</span><p>Segundos</p></div>
+                </div>
+
+                <h3 id="final-msg-aniversario" class="final-msg" style="display:none;">¡Feliz Aniversario, querida amiga!</h3>
+                <button id="btn-aniversario" class="main-btn" style="display:none;" type="button" onclick="location.href='/Vista/Aniversario.html'">
+                    Nuestra Historia 🌹
+                </button>
+            </section>
+
+            <!-- ---------- 2025: Cumpleaños ---------- -->
+            <section id="seccion-cumple" class="content-section">
+                <h2 class="sec-titulo">Tu Cumpleaños</h2>
+                <p class="sec-sub">Casi es hora de soplar las velas...</p>
+                <img src="/controlador/Cumpleaños.jpeg" alt="Cumpleaños" class="sec-imagen">
+
+                <div id="countdown-cumple" class="countdown">
+                    <div><span id="hours-cumple">00</span><p>Horas</p></div>
+                    <div><span id="minutes-cumple">00</span><p>Minutos</p></div>
+                    <div><span id="seconds-cumple">00</span><p>Segundos</p></div>
+                </div>
+
+                <h3 id="final-msg-cumple" class="final-msg" style="display:none;">¡Feliz Cumpleaños! 🎂</h3>
+                <button id="btn-cumple" class="main-btn" style="display:none;" type="button" onclick="location.href='/Vista/Cumple.html'">
+                    Abrir Regalo 🎁
+                </button>
+            </section>
+
         </div>
 
-    </div>
-    <audio id="countdown-audio" class="au" controls autoplay loop src="/controlador/ytmp3free.cc_morat-antes-de-los-veinte-visualiser-youtubemp3free.org.mp3" preload="auto"></audio>
+    </main>
+
+    <audio id="countdown-audio" class="au" controls loop src="/controlador/ytmp3free.cc_morat-antes-de-los-veinte-visualiser-youtubemp3free.org.mp3" preload="none"></audio>
+
 </body>
 </html>

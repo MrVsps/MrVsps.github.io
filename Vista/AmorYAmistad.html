@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2b0f1e">
+<title>Amor y Amistad 💛</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --fondo-1: #2b0f1e;
+  --fondo-2: #4a1436;
+  --rosa: #ff6b9d;
+  --rosa-claro: #ffb3cd;
+  --dorado: #ffd54f;
+  --verde: #7ed957;
+  --rojo: #ff5252;
+  --texto: #fff5f9;
+  --texto-suave: rgba(255, 245, 249, 0.66);
+  --cristal: rgba(255, 255, 255, 0.09);
+  --borde: rgba(255, 255, 255, 0.15);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 20px 16px calc(100px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--texto);
+  text-align: center;
+  overflow-x: hidden;
+  background:
+    radial-gradient(110% 70% at 50% 0%, var(--fondo-2) 0%, transparent 60%),
+    linear-gradient(170deg, #3a1128 0%, var(--fondo-1) 100%);
+  background-attachment: fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* margin auto en vez de justify-content: center — así el contenido queda
+   centrado pero nunca se recorta ni choca con el reproductor de audio */
+.pantalla {
+  width: 100%;
+  max-width: 520px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.pantalla[hidden] { display: none; }
+
+/* ---------- Botón volver ---------- */
+
+.volver {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  background: var(--cristal);
+  border: 1px solid var(--borde);
+  border-radius: 100px;
+  padding: 9px 18px;
+  min-height: 44px;
+  text-decoration: none;
+  z-index: 10;
+}
+
+/* ---------- Portada ---------- */
+
+.emoji-grande {
+  font-size: clamp(3.4rem, 18vw, 4.6rem);
+  line-height: 1;
+  display: inline-block; /* inline-block y no block: al latir no desborda a los lados */
+  animation: latido 1.6s ease-in-out infinite;
+}
+
+@keyframes latido {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
+
+.titulo {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2.3rem, 11vw, 3.3rem);
+  font-weight: 700;
+  margin: 12px 0 8px;
+  line-height: 1.1;
+  background: linear-gradient(100deg, var(--rosa) 5%, #fff0f6 45%, var(--dorado) 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitulo {
+  font-size: 1rem;
+  color: var(--texto-suave);
+  line-height: 1.55;
+  margin: 0 auto 28px;
+  max-width: 34ch;
+}
+
+/* ---------- Botón principal ---------- */
+
+.boton {
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #4a1020;
+  background: linear-gradient(135deg, var(--rosa-claro) 0%, var(--rosa) 100%);
+  border: 0;
+  border-radius: 100px;
+  padding: 16px 38px;
+  min-height: 54px;
+  cursor: pointer;
+  box-shadow: 0 10px 26px -10px rgba(255, 107, 157, 0.95);
+  transition: transform 0.16s ease;
+}
+
+.boton:active { transform: scale(0.96); }
+
+.boton--fantasma {
+  background: var(--cristal);
+  border: 1px solid var(--borde);
+  color: var(--texto);
+  box-shadow: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 13px 28px;
+  min-height: 48px;
+}
+
+/* ---------- Progreso ---------- */
+
+.progreso {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.progreso__barra {
+  flex: 1;
+  height: 8px;
+  background: var(--cristal);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.progreso__relleno {
+  height: 100%;
+  width: 0%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--rosa), var(--dorado));
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progreso__texto {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--texto-suave);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Pregunta ---------- */
+
+.pregunta {
+  font-size: clamp(1.15rem, 5.2vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0 0 24px;
+  min-height: 3.4em;
+}
+
+.opciones {
+  display: grid;
+  gap: 11px;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  color: var(--texto);
+  background: var(--cristal);
+  border: 1.5px solid var(--borde);
+  border-radius: 15px;
+  padding: 15px 16px;
+  min-height: 56px;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.opcion:active { transform: scale(0.98); }
+
+.opcion__letra {
+  flex: 0 0 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--rosa-claro);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.opcion__texto { flex: 1; }
+
+/* Estados de respuesta */
+.opcion.es-correcta {
+  background: rgba(126, 217, 87, 0.2);
+  border-color: var(--verde);
+}
+
+.opcion.es-correcta .opcion__letra {
+  background: var(--verde);
+  color: #10300a;
+}
+
+.opcion.es-incorrecta {
+  background: rgba(255, 82, 82, 0.18);
+  border-color: var(--rojo);
+  animation: sacudir 0.34s ease;
+}
+
+.opcion.es-incorrecta .opcion__letra {
+  background: var(--rojo);
+  color: #3a0000;
+}
+
+.opcion:disabled { cursor: default; }
+
+@keyframes sacudir {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+
+/* ---------- Corazones que suben ---------- */
+
+.corazon {
+  position: fixed;
+  font-size: 1.6rem;
+  pointer-events: none;
+  z-index: 60;
+  animation: subir 1.25s ease-out forwards;
+}
+
+@keyframes subir {
+  0%   { opacity: 1; transform: translate(-50%, 0) scale(0.6); }
+  100% { opacity: 0; transform: translate(-50%, -150px) scale(1.35); }
+}
+
+/* ---------- Resultado ---------- */
+
+.marcador {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(3.4rem, 20vw, 5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--dorado);
+  margin: 6px 0 4px;
+}
+
+.marcador__total {
+  font-size: 0.36em;
+  color: var(--texto-suave);
+}
+
+.veredicto {
+  font-size: 1.22rem;
+  font-weight: 700;
+  color: var(--rosa-claro);
+  margin: 0 0 12px;
+}
+
+.despedida {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--texto-suave);
+  margin: 0 auto 26px;
+  max-width: 36ch;
+}
+
+.firma {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  color: var(--dorado);
+  margin: 0 0 26px;
+}
+
+.acciones {
+  display: grid;
+  gap: 11px;
+  justify-items: center;
+}
+
+/* ---------- Música ----------
+   Botón pequeño en la esquina en vez de la barra nativa de <audio>:
+   en celular esa barra ocupa todo el ancho y tapa los botones de abajo. */
+
+.musica {
+  position: fixed;
+  right: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--borde);
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  z-index: 55;
+  transition: transform 0.2s ease, background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.musica:active { transform: scale(0.92); }
+
+.musica.sonando {
+  background: linear-gradient(135deg, var(--rosa-claro), var(--rosa));
+  color: #4a1020;
+}
+
+/* Latidito para invitar a tocar cuando aún no suena */
+.musica:not(.sonando) {
+  animation: llamar 2.4s ease-in-out infinite;
+}
+
+@keyframes llamar {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.5); }
+  50%      { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 107, 157, 0); }
+}
+</style>
+</head>
+<body>
+
+<a class="volver" href="/index.html">‹ Inicio</a>
+
+<!-- ============ PANTALLA 1: PORTADA ============ -->
+<section class="pantalla" id="pantalla-inicio">
+  <span class="emoji-grande">💛</span>
+  <h1 class="titulo">Amor y Amistad</h1>
+  <p class="subtitulo">
+    Hay cosas que solo se saben si uno estuvo ahí.<br>
+    Te hice <b>8 preguntas</b> sobre nosotros.<br>
+    A ver cuántas te acuerdas.
+  </p>
+  <button class="boton" type="button" id="btn-empezar">Empezar ✨</button>
+</section>
+
+<!-- ============ PANTALLA 2: PREGUNTAS ============ -->
+<section class="pantalla" id="pantalla-juego" hidden>
+  <div class="progreso">
+    <div class="progreso__barra"><div class="progreso__relleno" id="barra"></div></div>
+    <span class="progreso__texto" id="contador">1 / 8</span>
+  </div>
+
+  <h2 class="pregunta" id="pregunta">...</h2>
+  <div class="opciones" id="opciones"></div>
+</section>
+
+<!-- ============ PANTALLA 3: RESULTADO ============ -->
+<section class="pantalla" id="pantalla-final" hidden>
+  <span class="emoji-grande" id="emoji-final">🌻</span>
+  <h1 class="titulo" id="veredicto-titulo">¡Lo sabías todo!</h1>
+  <p class="marcador"><span id="aciertos">0</span><span class="marcador__total" id="total"></span></p>
+  <p class="veredicto" id="veredicto-frase"></p>
+  <p class="despedida" id="despedida"></p>
+  <p class="firma">Con cariño, Sebastián.</p>
+
+  <div class="acciones">
+    <button class="boton" type="button" id="btn-repetir">Jugar otra vez 🔁</button>
+    <a class="boton boton--fantasma" href="/index.html" style="text-decoration:none;display:inline-flex;align-items:center;">Volver al inicio</a>
+  </div>
+</section>
+
+<audio id="musica" loop preload="none"
+       src="/controlador/ytmp3free.cc_hestia-destripando-la-historia-letra-youtubemp3free.org.mp3"></audio>
+<button class="musica" type="button" id="btn-musica" aria-label="Poner música">🎵</button>
+
+<script>
+/* ============================================================
+   Las preguntas — todas sacadas de nuestra historia real
+   ============================================================ */
+const preguntas = [
+  {
+    p: "¿Dónde nos conocimos?",
+    ops: ["En TikTok", "En Neverland", "En el colegio"],
+    ok: 1
+  },
+  {
+    p: "¿Qué andaba buscando yo cuando te mandé ese primer mensaje?",
+    ops: ["Una amiga para hablar", "Pareja, tutor y clan", "Alguien que me ayudara con una tarea"],
+    ok: 1
+  },
+  {
+    p: "¿Qué conquistamos juntos en Roblox?",
+    ops: ["El Everest", "Una isla desierta", "Un castillo"],
+    ok: 0
+  },
+  {
+    p: "¿Qué juego de mesa jugamos con tu prima?",
+    ops: ["Ajedrez", "Parchís", "Uno"],
+    ok: 1
+  },
+  {
+    p: "¿Qué prueba te tuvo con los nervios de punta?",
+    ops: ["Las ICFES", "Un examen de matemáticas", "Una exposición"],
+    ok: 0
+  },
+  {
+    p: "¿En qué red social cuidamos la racha todos los días?",
+    ops: ["Instagram", "TikTok", "WhatsApp"],
+    ok: 1
+  },
+  {
+    p: "¿En qué mes te graduaste?",
+    ops: ["Noviembre", "Diciembre", "Junio"],
+    ok: 1
+  },
+  {
+    p: "¿Qué día celebramos nuestro aniversario?",
+    ops: ["El 20 de diciembre", "El 21 de septiembre", "El 14 de febrero"],
+    ok: 0
+  }
+];
+
+/* ============================================================
+   Mensajes según cuántas acertó
+   ============================================================ */
+const resultados = [
+  {
+    min: 8, emoji: "👑", titulo: "¡Perfecto!",
+    frase: "8 de 8. No se te escapó ni una.",
+    texto: "Te acuerdas de todo. O mejor dicho: lo viviste todo conmigo, y eso no se olvida. Gracias por guardar nuestra historia tan bien como yo."
+  },
+  {
+    min: 6, emoji: "🌻", titulo: "¡Muy bien!",
+    frase: "Sabes más de lo que crees.",
+    texto: "Casi todas. Las poquitas que fallaste son excusa perfecta para sentarnos a recordarlas otra vez, con calma, como a mí me gusta."
+  },
+  {
+    min: 4, emoji: "💛", titulo: "Nada mal",
+    frase: "Vas por buen camino.",
+    texto: "Bastantes, la verdad. Y las que se te olvidaron no importan: para eso estoy yo, para acordarme por los dos y contártelas cuando quieras."
+  },
+  {
+    min: 0, emoji: "✨", titulo: "Toca seguir",
+    frase: "Aquí falta historia por escribir.",
+    texto: "Tranquila, todavía nos quedan muchísimos momentos por vivir que sí vas a recordar. Empecemos por el de hoy."
+  }
+];
+
+/* ============================================================
+   Lógica del juego
+   ============================================================ */
+const pantallaInicio = document.getElementById('pantalla-inicio');
+const pantallaJuego  = document.getElementById('pantalla-juego');
+const pantallaFinal  = document.getElementById('pantalla-final');
+
+const elPregunta = document.getElementById('pregunta');
+const elOpciones = document.getElementById('opciones');
+const elBarra    = document.getElementById('barra');
+const elContador = document.getElementById('contador');
+
+let indice = 0;
+let aciertos = 0;
+let bloqueado = false;
+
+function mostrar(pantalla) {
+  [pantallaInicio, pantallaJuego, pantallaFinal].forEach((p) => {
+    p.hidden = p !== pantalla;
+  });
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function pintarPregunta() {
+  const actual = preguntas[indice];
+  bloqueado = false;
+
+  elContador.textContent = `${indice + 1} / ${preguntas.length}`;
+  elBarra.style.width = `${(indice / preguntas.length) * 100}%`;
+  elPregunta.textContent = actual.p;
+
+  elOpciones.innerHTML = '';
+  actual.ops.forEach((texto, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'opcion';
+    btn.innerHTML =
+      `<span class="opcion__letra">${'ABC'[i]}</span>` +
+      `<span class="opcion__texto">${texto}</span>`;
+    btn.addEventListener('click', () => responder(i, btn));
+    elOpciones.appendChild(btn);
+  });
+}
+
+function responder(elegida, btn) {
+  if (bloqueado) return;
+  bloqueado = true;
+
+  const actual = preguntas[indice];
+  const correcta = elegida === actual.ok;
+
+  // Deshabilitar todo y marcar la respuesta correcta
+  [...elOpciones.children].forEach((b, i) => {
+    b.disabled = true;
+    if (i === actual.ok) b.classList.add('es-correcta');
+  });
+
+  if (correcta) {
+    aciertos++;
+    lanzarCorazones(btn);
+  } else {
+    btn.classList.add('es-incorrecta');
+  }
+
+  elBarra.style.width = `${((indice + 1) / preguntas.length) * 100}%`;
+
+  setTimeout(() => {
+    indice++;
+    if (indice < preguntas.length) {
+      pintarPregunta();
+    } else {
+      terminar();
+    }
+  }, correcta ? 900 : 1250);
+}
+
+function lanzarCorazones(desde) {
+  const caja = desde.getBoundingClientRect();
+  const x = caja.left + caja.width / 2;
+  const y = caja.top + caja.height / 2;
+
+  for (let i = 0; i < 6; i++) {
+    const c = document.createElement('span');
+    c.className = 'corazon';
+    c.textContent = ['💛', '💕', '🌻', '✨'][i % 4];
+    c.style.left = `${x + (Math.random() - 0.5) * 120}px`;
+    c.style.top  = `${y}px`;
+    c.style.animationDelay = `${i * 70}ms`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 1500);
+  }
+}
+
+function terminar() {
+  const r = resultados.find((res) => aciertos >= res.min);
+
+  document.getElementById('emoji-final').textContent = r.emoji;
+  document.getElementById('veredicto-titulo').textContent = r.titulo;
+  document.getElementById('aciertos').textContent = aciertos;
+  document.getElementById('veredicto-frase').textContent = r.frase;
+  document.getElementById('despedida').textContent = r.texto;
+
+  mostrar(pantallaFinal);
+
+  if (aciertos >= 6) {
+    setTimeout(() => lanzarCorazones(document.getElementById('aciertos')), 250);
+  }
+}
+
+function empezar() {
+  indice = 0;
+  aciertos = 0;
+  mostrar(pantallaJuego);
+  pintarPregunta();
+}
+
+document.getElementById('btn-empezar').addEventListener('click', empezar);
+document.getElementById('btn-repetir').addEventListener('click', empezar);
+
+/* ============================================================
+   Música: el botón de la esquina prende y apaga la canción
+   ============================================================ */
+const musica = document.getElementById('musica');
+const btnMusica = document.getElementById('btn-musica');
+
+btnMusica.addEventListener('click', () => {
+  if (musica.paused) {
+    musica.play().catch(() => {}); // si el navegador lo bloquea, no pasa nada
+  } else {
+    musica.pause();
+  }
+});
+
+musica.addEventListener('play', () => {
+  btnMusica.classList.add('sonando');
+  btnMusica.textContent = '🔊';
+  btnMusica.setAttribute('aria-label', 'Pausar música');
+});
+
+musica.addEventListener('pause', () => {
+  btnMusica.classList.remove('sonando');
+  btnMusica.textContent = '🎵';
+  btnMusica.setAttribute('aria-label', 'Poner música');
+});
+</script>
+
+</body>
+</html>
