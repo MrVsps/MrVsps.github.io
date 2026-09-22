@@ -365,7 +365,7 @@ body {
   <h1 class="titulo">Amor y Amistad</h1>
   <p class="subtitulo">
     Hay cosas que solo se saben si uno estuvo ahí.<br>
-    Te hice <b>8 preguntas</b> sobre nosotros.<br>
+    Te hice <b><span id="num-preguntas">8</span> preguntas</b> sobre nosotros.<br>
     A ver cuántas te acuerdas.
   </p>
   <button class="boton" type="button" id="btn-empezar">Empezar ✨</button>
@@ -433,42 +433,77 @@ const preguntas = [
   },
   {
     p: "¿En qué red social cuidamos la racha todos los días?",
-    ops: ["Instagram", "TikTok", "WhatsApp"],
-    ok: 1
+    ops: ["Instagram", "WhatsApp", "TikTok"],
+    ok: 2
   },
   {
     p: "¿En qué mes te graduaste?",
-    ops: ["Noviembre", "Diciembre", "Junio"],
-    ok: 1
+    ops: ["Noviembre", "Junio", "Diciembre"],
+    ok: 2
   },
   {
     p: "¿Qué día celebramos nuestro aniversario?",
     ops: ["El 20 de diciembre", "El 21 de septiembre", "El 14 de febrero"],
     ok: 0
+  },
+
+  /* ---------- 2026: lo que pasó este año ---------- */
+  {
+    p: "¿Qué hiciste en Neverland sin preguntarme?",
+    ops: ["Te divorciaste de mí", "Me pediste matrimonio otra vez", "Me regalaste una skin"],
+    ok: 0
+  },
+  {
+    p: "Cuando volviste a aparecer en abril, ¿qué me quedó clarísimo?",
+    ops: ["Que sí me amabas", "Que querías solo amistad", "Que te ibas del país"],
+    ok: 0
+  },
+  {
+    p: "¿A qué juego le estamos metiendo horas ahora?",
+    ops: ["Roblox", "Minecraft", "Free Fire"],
+    ok: 1
+  },
+  {
+    p: "¿A dónde me toca ir si quiero darte un abrazo?",
+    ops: ["Pereira", "La Virginia", "Balboa"],
+    ok: 2
+  },
+  {
+    p: "¿Cómo le digo a tu mamá?",
+    ops: ["Suegrita", "Suegris", "Doña"],
+    // Las dos valen: suegrita cuando estoy tranquilo, suegris cuando me da miedo
+    ok: [0, 1]
+  },
+  {
+    p: "¿Qué es lo que más te hace falta ahora mismo?",
+    ops: ["Dormir", "Algo rico de comer", "Un beso"],
+    ok: 2
   }
 ];
 
 /* ============================================================
    Mensajes según cuántas acertó
+   El "pct" es el porcentaje de aciertos, así que esto se ajusta
+   solo sin importar cuántas preguntas tenga el juego.
    ============================================================ */
 const resultados = [
   {
-    min: 8, emoji: "👑", titulo: "¡Perfecto!",
-    frase: "8 de 8. No se te escapó ni una.",
+    pct: 1, emoji: "👑", titulo: "¡Perfecto!",
+    frase: "Las acertaste todas. No se te escapó ni una.",
     texto: "Te acuerdas de todo. O mejor dicho: lo viviste todo conmigo, y eso no se olvida. Gracias por guardar nuestra historia tan bien como yo."
   },
   {
-    min: 6, emoji: "🌻", titulo: "¡Muy bien!",
+    pct: 0.75, emoji: "🌻", titulo: "¡Muy bien!",
     frase: "Sabes más de lo que crees.",
     texto: "Casi todas. Las poquitas que fallaste son excusa perfecta para sentarnos a recordarlas otra vez, con calma, como a mí me gusta."
   },
   {
-    min: 4, emoji: "💛", titulo: "Nada mal",
+    pct: 0.5, emoji: "💛", titulo: "Nada mal",
     frase: "Vas por buen camino.",
     texto: "Bastantes, la verdad. Y las que se te olvidaron no importan: para eso estoy yo, para acordarme por los dos y contártelas cuando quieras."
   },
   {
-    min: 0, emoji: "✨", titulo: "Toca seguir",
+    pct: 0, emoji: "✨", titulo: "Toca seguir",
     frase: "Aquí falta historia por escribir.",
     texto: "Tranquila, todavía nos quedan muchísimos momentos por vivir que sí vas a recordar. Empecemos por el de hoy."
   }
@@ -523,12 +558,16 @@ function responder(elegida, btn) {
   bloqueado = true;
 
   const actual = preguntas[indice];
-  const correcta = elegida === actual.ok;
 
-  // Deshabilitar todo y marcar la respuesta correcta
+  // "ok" puede ser un solo índice o varios: hay preguntas donde más de una
+  // respuesta es cierta (por ejemplo la de "suegrita" y "suegris").
+  const correctas = Array.isArray(actual.ok) ? actual.ok : [actual.ok];
+  const correcta = correctas.includes(elegida);
+
+  // Deshabilitar todo y marcar todas las respuestas válidas
   [...elOpciones.children].forEach((b, i) => {
     b.disabled = true;
-    if (i === actual.ok) b.classList.add('es-correcta');
+    if (correctas.includes(i)) b.classList.add('es-correcta');
   });
 
   if (correcta) {
@@ -568,17 +607,18 @@ function lanzarCorazones(desde) {
 }
 
 function terminar() {
-  const r = resultados.find((res) => aciertos >= res.min);
+  const r = resultados.find((res) => aciertos >= Math.round(res.pct * preguntas.length));
 
   document.getElementById('emoji-final').textContent = r.emoji;
   document.getElementById('veredicto-titulo').textContent = r.titulo;
   document.getElementById('aciertos').textContent = aciertos;
+  document.getElementById('total').textContent = '/' + preguntas.length;
   document.getElementById('veredicto-frase').textContent = r.frase;
   document.getElementById('despedida').textContent = r.texto;
 
   mostrar(pantallaFinal);
 
-  if (aciertos >= 6) {
+  if (aciertos >= preguntas.length * 0.75) {
     setTimeout(() => lanzarCorazones(document.getElementById('aciertos')), 250);
   }
 }
@@ -589,6 +629,9 @@ function empezar() {
   mostrar(pantallaJuego);
   pintarPregunta();
 }
+
+// El número de preguntas se escribe solo, para no tener que actualizarlo a mano
+document.getElementById('num-preguntas').textContent = preguntas.length;
 
 document.getElementById('btn-empezar').addEventListener('click', empezar);
 document.getElementById('btn-repetir').addEventListener('click', empezar);
