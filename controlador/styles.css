@@ -39,7 +39,8 @@ body {
     color: var(--texto);
     text-align: center;
     margin: 0;
-    padding: 22px 16px calc(112px + env(safe-area-inset-bottom));
+    /* Abajo solo hay que dejarle campo al botón redondo de música */
+    padding: 22px 16px calc(80px + env(safe-area-inset-bottom));
     min-height: 100vh;
     min-height: 100dvh;
     overflow-x: hidden;
@@ -114,6 +115,31 @@ body {
     margin: 0 auto;
 }
 
+/* En pantalla grande el contenido quedaba pegado arriba, con un vacío enorme
+   debajo. Con márgenes automáticos arriba y abajo el bloque se centra solo.
+   Ojo: NO uso justify-content: center, porque cuando el contenido es más alto
+   que la pantalla recorta la parte de arriba y no se puede alcanzar con
+   scroll. Con márgenes automáticos, si no cabe, valen 0 y hace scroll normal. */
+@media (min-width: 900px) {
+    body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .cabecera {
+        margin-top: auto;
+    }
+
+    .container {
+        /* width:100% es obligatorio: dentro de un flex column, los márgenes
+           automáticos laterales hacen que el elemento se encoja al tamaño de
+           su contenido en vez de estirarse, y el max-width no se aprovecha. */
+        width: 100%;
+        max-width: 700px;
+        margin-bottom: auto;
+    }
+}
+
 .card-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -138,13 +164,16 @@ body {
     gap: 2px;
     font-family: inherit;
     color: var(--texto);
-    background: var(--cristal);
-    border: 1px solid var(--borde);
+    /* Antes era blanco al 8% de opacidad: en pantalla se veía como una mancha
+       borrosa, no como una tarjeta. Un degradado con más cuerpo + sombra. */
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.17) 0%, rgba(255, 255, 255, 0.06) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: var(--radio);
-    padding: 22px 16px;
-    min-height: 118px;
+    padding: 24px 18px;
+    min-height: 132px;
     cursor: pointer;
     overflow: hidden;
+    box-shadow: 0 14px 30px -20px rgba(0, 0, 0, 0.95);
     transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     -webkit-tap-highlight-color: transparent;
 }
@@ -153,8 +182,8 @@ body {
     content: "";
     position: absolute;
     inset: 0;
-    background: radial-gradient(90% 120% at 50% 0%, var(--brillo, transparent) 0%, transparent 70%);
-    opacity: 0.5;
+    background: radial-gradient(95% 130% at 50% 0%, var(--brillo, transparent) 0%, transparent 72%);
+    opacity: 0.8;
     pointer-events: none;
 }
 
@@ -307,7 +336,11 @@ body {
     box-shadow: 0 4px 12px -6px rgba(249, 168, 37, 0.9);
 }
 
-/* ---------------- Reproductor de audio ---------------- */
+/* ---------------- Reproductor nativo (solo páginas 2025) ----------------
+   Libro.html, Cumple.html y Aniversario.html todavía usan
+   <audio class="au" controls>. Esta regla se queda para no romperlas: sin
+   ella la barra se sale de su posición y queda tirada en medio del contenido.
+   Las páginas nuevas ya no la usan, tienen el botón redondo de abajo. */
 
 .au {
     position: fixed;
@@ -324,4 +357,48 @@ body {
 .au:active,
 .au:focus-within {
     opacity: 1;
+}
+
+/* ---------------- Botón de música ----------------
+   El <audio controls> nativo es una barra gris que en celular ocupa casi todo
+   el ancho, tapa lo de abajo y no pega con nada. En su lugar, un botón. */
+
+.musica {
+    position: fixed;
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom));
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--texto);
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid var(--borde);
+    border-radius: 50%;
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+    z-index: 55;
+    transition: transform 0.2s ease, background 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.musica:active {
+    transform: scale(0.92);
+}
+
+.musica.sonando {
+    background: linear-gradient(135deg, var(--dorado), var(--dorado-fuerte));
+    color: #3a2500;
+}
+
+/* Latidito para invitar a tocar mientras no suena */
+.musica:not(.sonando) {
+    animation: llamar 2.4s ease-in-out infinite;
+}
+
+@keyframes llamar {
+    0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 213, 79, 0.5); }
+    50%      { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 213, 79, 0); }
 }

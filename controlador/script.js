@@ -100,3 +100,31 @@ function volverAlMenu() {
         sec.hidden = true;
     });
 }
+
+// ============================================================
+//  4. Música: el botón de la esquina prende y apaga la canción
+// ============================================================
+const musica = document.getElementById('countdown-audio');
+const btnMusica = document.getElementById('btn-musica');
+
+if (musica && btnMusica) {
+    btnMusica.addEventListener('click', () => {
+        if (musica.paused) {
+            musica.play().catch(() => {}); // si el navegador lo bloquea, no pasa nada
+        } else {
+            musica.pause();
+        }
+    });
+
+    musica.addEventListener('play', () => {
+        btnMusica.classList.add('sonando');
+        btnMusica.textContent = '🔊';
+        btnMusica.setAttribute('aria-label', 'Pausar música');
+    });
+
+    musica.addEventListener('pause', () => {
+        btnMusica.classList.remove('sonando');
+        btnMusica.textContent = '🎵';
+        btnMusica.setAttribute('aria-label', 'Poner música');
+    });
+}
