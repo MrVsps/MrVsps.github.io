@@ -212,6 +212,7 @@ body {
 .gift-card--amistad    { --brillo: rgba(255, 213, 79, 0.5); }
 .gift-card--flores     { --brillo: rgba(126, 217, 87, 0.45); }
 .gift-card--aniversario{ --brillo: rgba(179, 136, 255, 0.5); }
+.gift-card--piropos    { --brillo: rgba(255, 112, 67, 0.5); }
 
 @media (hover: hover) {
     .gift-card:hover {

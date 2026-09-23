@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2b0f1c">
+<title>100 Piropos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --vino-1: #2b0f1c;
+  --vino-2: #55142f;
+  --rosa: #ff6b9d;
+  --rosa-claro: #ffc2d8;
+  --dorado: #ffd54f;
+  --texto: #fff6f8;
+  --texto-suave: rgba(255, 246, 248, 0.68);
+  --cristal: rgba(255, 255, 255, 0.07);
+  --borde: rgba(255, 255, 255, 0.15);
+}
+
+* { box-sizing: border-box; }
+
+/* El atributo hidden tiene que ganarle al display:flex del modal */
+[hidden] { display: none !important; }
+
+body {
+  font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 20px 16px calc(96px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--texto);
+  text-align: center;
+  overflow-x: hidden;
+  background:
+    radial-gradient(110% 70% at 50% 0%, var(--vino-2) 0%, transparent 62%),
+    linear-gradient(170deg, #401228 0%, var(--vino-1) 100%);
+  background-attachment: fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Con el modal abierto, que el fondo no haga scroll por detrás */
+body.con-modal { overflow: hidden; }
+
+.pantalla {
+  width: 100%;
+  max-width: 560px;
+  margin-top: auto;
+  margin-bottom: auto;
+  /* Centrar con margin auto no alcanza en esta página: con 100 sobres el
+     contenido siempre es más alto que la pantalla, así que el auto vale 0 y
+     el título arrancaba pegado arriba, metido debajo del botón fijo
+     "‹ Inicio" (que ocupa hasta 12px + 44 de alto). Este relleno se lo quita
+     de encima. */
+  padding-top: calc(40px + env(safe-area-inset-top));
+}
+
+/* ---------------- Volver ---------------- */
+
+.volver {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+  background: var(--cristal);
+  border: 1px solid var(--borde);
+  border-radius: 100px;
+  padding: 9px 18px;
+  min-height: 44px;
+  text-decoration: none;
+  z-index: 60;
+  backdrop-filter: blur(6px);
+}
+
+/* ---------------- Títulos ---------------- */
+
+.titulo {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(2.4rem, 12vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 8px 0 10px;
+  background: linear-gradient(100deg, var(--rosa) 5%, #fff0f6 45%, var(--dorado) 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.instruccion {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--texto-suave);
+  margin: 0 0 22px;
+}
+
+.progreso {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--dorado);
+  margin: 0 0 16px;
+  min-height: 1.4em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------- La rejilla de 100 ---------------- */
+
+.sobres {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+@media (min-width: 420px) {
+  .sobres { grid-template-columns: repeat(6, 1fr); }
+}
+
+@media (min-width: 560px) {
+  .sobres { grid-template-columns: repeat(8, 1fr); }
+}
+
+.sobre {
+  position: relative;
+  aspect-ratio: 1 / 0.96;
+  display: grid;
+  place-items: center;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-suave);
+  background: var(--cristal);
+  border: 1px solid var(--borde);
+  border-radius: 11px;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.16s ease, background 0.22s ease,
+              color 0.22s ease, border-color 0.22s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sobre:active { transform: scale(0.93); }
+
+/* Ya abierto: se queda marcado para que se vea cuánto lleva */
+.sobre.abierto {
+  color: var(--dorado);
+  background: linear-gradient(150deg, rgba(255, 213, 79, 0.22), rgba(255, 107, 157, 0.14));
+  border-color: rgba(255, 213, 79, 0.5);
+}
+
+.sobre.abierto::after {
+  content: "♥";
+  position: absolute;
+  bottom: 4px;
+  font-size: 0.5rem;
+  line-height: 1;
+  color: var(--dorado);
+}
+
+/* ---------------- El piropo abierto ---------------- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  overflow-y: auto;
+  padding: 20px 16px calc(20px + env(safe-area-inset-bottom));
+  background: rgba(12, 4, 9, 0.84);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  animation: aparecer 0.22s ease;
+}
+
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+
+.modal__caja {
+  /* margin auto en vez de centrar con flex: si el piropo es largo y no cabe
+     en la pantalla, así se puede hacer scroll y no queda recortado arriba */
+  margin: auto;
+  width: 100%;
+  max-width: 430px;
+  background: linear-gradient(160deg, #4a1229 0%, #2e0d1d 100%);
+  border: 1px solid rgba(255, 213, 79, 0.32);
+  border-radius: 24px;
+  padding: 30px 24px 22px;
+  box-shadow: 0 26px 60px -24px rgba(0, 0, 0, 0.95);
+  animation: entrar 0.34s cubic-bezier(0.34, 1.32, 0.5, 1);
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: translateY(22px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal__num {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rosa);
+  margin-bottom: 16px;
+}
+
+.modal__texto {
+  font-size: clamp(1.08rem, 4.8vw, 1.28rem);
+  line-height: 1.65;
+  margin: 0 0 26px;
+}
+
+.modal__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.flecha, .cerrar {
+  font-family: inherit;
+  font-weight: 700;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--borde);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.16s ease, background 0.2s ease;
+}
+
+.flecha {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+.flecha:active, .cerrar:active { transform: scale(0.93); }
+
+/* Cuando no hay anterior o siguiente, el hueco se queda pero el botón no */
+.flecha[disabled] { opacity: 0.25; }
+
+.cerrar {
+  flex: 1 1 auto;
+  font-size: 0.95rem;
+  border-radius: 100px;
+  padding: 13px 20px;
+  min-height: 48px;
+}
+
+/* ---------------- Cierre, al completar los 100 ---------------- */
+
+.cierre {
+  margin: 30px 0 0;
+  padding: 26px 20px;
+  background: var(--cristal);
+  border: 1px solid rgba(255, 213, 79, 0.3);
+  border-radius: 22px;
+  animation: entrar 0.7s cubic-bezier(0.34, 1.3, 0.5, 1);
+}
+
+.cierre__emoji { font-size: 2.4rem; line-height: 1; display: block; }
+
+.cierre__texto {
+  font-size: 1rem;
+  line-height: 1.72;
+  color: var(--texto-suave);
+  margin: 16px 0 0;
+}
+
+.cierre__texto b { color: var(--rosa-claro); }
+
+.cierre__firma {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.5rem;
+  color: var(--dorado);
+  margin: 20px 0 0;
+}
+
+/* ---------------- Confeti ---------------- */
+
+.confeti {
+  position: fixed;
+  top: -24px;
+  border-radius: 2px;
+  z-index: 90;
+  pointer-events: none;
+  animation: caer linear forwards;
+}
+
+@keyframes caer {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(108vh) rotate(760deg); opacity: 0.85; }
+}
+
+/* ---------------- Música ---------------- */
+
+.musica {
+  position: fixed;
+  right: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--borde);
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  z-index: 55;
+  transition: transform 0.2s ease, background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.musica:active { transform: scale(0.92); }
+
+.musica.sonando {
+  background: linear-gradient(135deg, var(--rosa-claro), var(--rosa));
+  color: #4a1020;
+}
+
+.musica:not(.sonando) { animation: llamar 2.4s ease-in-out infinite; }
+
+@keyframes llamar {
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.5); }
+  50%      { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 107, 157, 0); }
+}
+</style>
+</head>
+<body>
+
+<a class="volver" href="/index.html">‹ Inicio</a>
+
+<main class="pantalla">
+  <h1 class="titulo">100 Piropos</h1>
+  <p class="instruccion">Una promesa vieja, cumplida por fin.<br>Toca el que quieras. Son todos tuyos.</p>
+  <p class="progreso" id="progreso">Has abierto 0 de 100</p>
+
+  <div class="sobres" id="sobres"></div>
+
+  <div class="cierre" id="cierre" hidden>
+    <span class="cierre__emoji">💛</span>
+    <p class="cierre__texto">
+      Los abriste todos. Los cien.<br><br>
+      Si algún día te vuelve a pasar eso de mirarte al espejo y no gustarte lo que ves,
+      <b>vuelve aquí y empieza otra vez.</b> Están escritos para quedarse.
+    </p>
+    <p class="cierre__firma">Con cariño.</p>
+  </div>
+</main>
+
+<!-- El piropo abierto -->
+<div class="modal" id="modal" hidden>
+  <div class="modal__caja" role="dialog" aria-modal="true" aria-labelledby="modal-num">
+    <span class="modal__num" id="modal-num"></span>
+    <p class="modal__texto" id="modal-texto"></p>
+    <div class="modal__nav">
+      <button class="flecha" type="button" id="anterior" aria-label="Piropos anteriores">‹</button>
+      <button class="cerrar" type="button" id="cerrar">Cerrar</button>
+      <button class="flecha" type="button" id="siguiente" aria-label="Siguiente piropo">›</button>
+    </div>
+  </div>
+</div>
+
+<audio id="musica" loop preload="none"
+       src="/controlador/ytmp3free.cc_morat-antes-de-los-veinte-visualiser-youtubemp3free.org.mp3"></audio>
+<button class="musica" type="button" id="btn-musica" aria-label="Poner música">🎵</button>
+
+<script>
+/* ============================================================
+   LOS 100 PIROPOS
+   ============================================================
+   Están agrupados por tema para poder editarlos cómodo, pero NO se
+   muestran en este orden: más abajo se mezclan. Si se mostraran así,
+   quien abriera los primeros ocho seguidos leería ocho sobre los ojos.
+   ============================================================ */
+const PIROPOS = [
+
+  /* --- Los ojos --- */
+  "Tienes los ojos cafés más bonitos que he visto, y eso que una vez me quedé mirando las estrellas toda la noche.",
+  "Cuando algo te da risa de verdad se te achican los ojos, y de ahí en adelante ya no hay nada que hacer conmigo.",
+  "Tus ojos son café oscuro, de esos que uno mira y se queda. Yo me quedé.",
+  "De todas las cosas oscuras que me gustan, tus ojos van primeras.",
+  "No me hace falta luz en el cuarto si estás mirándome.",
+  "Llevo años buscando cómo se llama el color exacto de tus ojos. No existe, ya me resigné.",
+  "Me gusta cuando me miras aguantándote la risa. Se te nota en los ojos antes que en la boca.",
+  "Tus ojos no se parecen a las estrellas. Las estrellas se parecen a tus ojos. Es distinto.",
+
+  /* --- El pelo --- */
+  "Tienes un pelo que da ganas de quedarse quieto un rato, solo mirándolo.",
+  "Se te nota que lo cuidas. Y me gusta que lo cuides, porque yo también lo quiero.",
+  "Ese pelo largo es de las primeras cosas que se me vienen a la cabeza cuando te pienso.",
+  "Me gusta cuando se te cae el pelo encima de la cara y te lo quitas de un manotazo.",
+  "Tu pelo huele a algo que no sé nombrar, y cada vez que lo huelo me quedo quieto.",
+  "Pelo largo, ojos cafés y una cara que no me aprendo por más que la miro.",
+  "Te queda bien suelto, te queda bien recogido y te queda bien de cualquier forma. Ya no hay caso.",
+
+  /* --- La estatura --- */
+  "Mides 1,45 y aun así me llenas el cuarto entero.",
+  "No eres bajita. Eres del tamaño exacto para abrazarte y que quepa toda.",
+  "Hay gente que ocupa mucho espacio y no llena nada. Tú eres al revés.",
+  "Me gusta a qué altura me llegas. Todo queda donde tiene que quedar.",
+  "1,45 y me sigues quedando grande. No sé cómo haces.",
+  "Los tamaños los inventó alguien que nunca te había visto.",
+  "La gente alta se tiene que agachar para abrazar. Yo no, y me parece mejor así.",
+  "Que nadie te haga creer que hay una talla para ser suficiente.",
+
+  /* --- La cara que parece de niña --- */
+  "Tienes cara de niña y un día eso va a ser lo mejor que tengas. Te lo digo con conocimiento de causa.",
+  "La gente que aparenta más edad a los veinte termina arrepentida a los cuarenta. Tú vas al contrario y todavía no lo sabes.",
+  "Esa cara que a ti te da rabia es la que hace que uno quiera cuidarte. A mí no me molesta en nada.",
+  "Hay caras que se gastan rápido. La tuya no se va a gastar nunca.",
+  "Que te digan que pareces menor no es un defecto. Es una deuda que el tiempo te va a pagar con intereses.",
+  "Cuando tengas cuarenta vas a seguir teniendo esa cara y te vas a reír de todo esto.",
+
+  /* --- Los muslos --- */
+  "Te lo he dicho mil veces y lo voy a decir mil más: me gustan tus muslos.",
+  "No es un piropo de relleno. Me gustan de verdad y me gusta decírtelo.",
+  "Cada vez que te pones esos jeans me toca hacer un esfuerzo para mirarte a la cara.",
+  "Tus muslos son de esas cosas que me distraen en mitad de una conversación.",
+  "Me gusta cómo te ves de perfil. Y de frente. Y de espaldas. Y en general.",
+  "Hay prendas que te quedan bien y prendas que te quedan peligrosas.",
+  "Me gustan tus muslos. Ya está. No pienso elaborar más.",
+
+  /* --- El apodo que solo entendemos los dos --- */
+  "Las bauticé María Juana y creo que es el mejor nombre que le he puesto a algo en mi vida.",
+  "María Juana. Solo eso. Tú sabes.",
+  "Hay dos nombres que no puedo decir en voz alta sin sonreír, y María Juana es uno.",
+  "Salúdame a María Juana y cuídame ese saludo.",
+
+  /* --- Coqueto, con insinuación. Nada de esto ha pasado todavía:
+         justamente de eso se tratan, de las ganas y de la espera. --- */
+  "Todavía no te he puesto un dedo encima y ya te extraño como si te hubiera tenido toda la vida.",
+  "Hay una lista de cosas que te quiero hacer y todavía no la he empezado. Va a ser larga.",
+  "Me tienes pensando cosas que no debería estar pensando a esta hora.",
+  "Lo que más me gusta de todo esto es que todavía no ha pasado nada. Todavía.",
+  "A veces te imagino cerquita y me toca parar lo que estoy haciendo.",
+  "Anticípate un poquito. Yo llevo meses anticipándome.",
+  "Cada día que no te toco es un día que me guardo para después.",
+  "No es que no quiera. Es que quiero mucho y llevo mucho tiempo queriendo.",
+  "Cuando por fin te tenga cerca no me voy a acordar de nada de lo que tenía pensado decirte.",
+  "Me gusta que esto todavía sea de hablar. Pero no te acostumbres.",
+  "Tienes una boca que me hace perder el hilo de lo que estoy diciendo.",
+  "Si supieras la mitad de lo que pienso cuando te quedas callada, te sonrojarías. Eso espero.",
+
+  /* --- Juguetones --- */
+  "Te gusta que te diga cosas bonitas y a mí me gusta decírtelas. Todos ganamos.",
+  "Alguien me dijo que escribiera cien piropos. Spoiler: los escribí yo, uno por uno.",
+  "Si me pagaran por hacerte creer lo que te digo, ya estaría quebrado.",
+  "Eres mi persona favorita de todos los siglos, y he leído bastante historia.",
+  "Llevo contigo más tiempo del que llevo entendiéndote, y sigo sin entenderte. Me gusta así.",
+  "Podría estar haciendo cualquier otra cosa y estoy aquí escribiendo cien cosas sobre ti. Saca conclusiones.",
+  "Esto es más largo que una tarea y nadie me está calificando.",
+  "Si te aburres, cuenta cuántas veces digo «muslos». No te van a alcanzar los dedos.",
+  "Hay noventa y nueve piropos más y todos dicen lo mismo de formas distintas.",
+  "Este es el único lugar donde soy cursi y no me da pena.",
+
+  /* --- Los que van en serio --- */
+  "Te amo. Sin metáfora, sin adorno, sin nada: te amo.",
+  "A mis ojos eres perfecta, y mis ojos son los únicos que tienen que opinar.",
+  "Si alguien te dice que no eres perfecta, pregúntale si te ha visto como te veo yo.",
+  "No te quiero perfecta. Te quiero a ti. Que es mejor.",
+  "Te amo cuando te sientes bonita y te amo cuando no. Es la misma persona las dos veces.",
+  "Llevo mucho tiempo queriéndote y no se me ha ido ni un día.",
+  "Hay días en que no sé cómo decírtelo. Por eso estoy escribiendo cien.",
+  "No eres mi media naranja. Eres la naranja entera y yo el que tuvo suerte.",
+  "Me gustas más de lo que me gusta admitir, y a ti te admito todo.",
+  "Si tuviera que elegir otra vez, elegiría otra vez.",
+  "No te quiero por cómo te ves. Te quiero por cómo eres. Que te veas así es un bono.",
+  "Te amo hoy, te amé el año pasado y pienso seguir. Ya llevo mucho de lo mismo.",
+
+  /* --- Cómo eres --- */
+  "Tienes una risa que se te sale entera y no la sabes disimular. No lo aprendas.",
+  "Eres de las que dicen lo que piensan y después se preocupan por haberlo dicho. Me gusta también esa parte.",
+  "Se te nota cuando estás feliz. No lo puedes esconder y me alegra el día.",
+  "Eres terca. Me gusta que seas terca. Me gusta más cuando la terquedad es a mi favor.",
+  "Tienes un sentido del humor que no le pega a tu cara, y por eso es mejor.",
+  "Cuando te emocionas con algo hablas más rápido y se te olvida respirar. Lo he notado.",
+  "Eres inteligente y no lo usas para hacer sentir mal a nadie. Eso es más raro de lo que crees.",
+  "Tienes una forma de contar las cosas que hace que uno quiera que sigan siendo largas.",
+  "Me gusta que seas celosa. Me gusta que te importe.",
+  "Eres fuerte de una forma que no se nota, que es la única forma de ser fuerte de verdad.",
+
+  /* --- La distancia --- */
+  "Te veo por una pantalla y aun así te veo mejor que a la gente que tengo al lado.",
+  "Odio la distancia, y la odio más desde que te conozco.",
+  "Un día de estos voy a dejar de verte a través de un vidrio.",
+  "Hay kilómetros entre los dos y aun así te siento cerca. Los kilómetros no saben nada.",
+  "Me sé tu cara de memoria y hace mucho que no te veo en persona. Es raro y es bonito.",
+  "Cuando te vea otra vez no sé si te voy a decir algo o me voy a quedar callado. Probablemente lo segundo.",
+  "Mientras tanto me conformo con verte reír en una videollamada, y con eso me alcanza. Casi.",
+  "Todas estas cosas te las digo por un teléfono porque no tengo otra forma. Ojalá tuviera otra.",
+
+  /* --- Lo pequeñito del día a día --- */
+  "Me gusta cuando me cuentas cosas que no le has contado a nadie. Eso es lo que más me gusta de todo.",
+  "Me gusta que me escribas a cualquier hora sin pensar si es tarde.",
+  "Me acuerdo de cosas que me dijiste hace meses. No las anoté, se me quedaron.",
+  "Me gusta cuando te quedas callada en la llamada y no cuelgas. Eso también es estar juntos.",
+  "Me gusta que existas y que estés en mi vida. Es lo más simple que te puedo decir.",
+  "Si algún día dudas de todo, vuelve aquí y lee esto otra vez.",
+  "No hay una versión de mi vida que quiera sin ti en ella.",
+  "Eres, con diferencia, lo mejor que me ha pasado. Y ya van cien veces que te lo digo."
+];
+
+/* ============================================================
+   Mezclar los piropos
+   ============================================================
+   Se mezclan con una semilla FIJA, no al azar de cada visita. Es
+   importante: los que ella ya abrió se guardan por número, y si el
+   orden cambiara entre visitas, el número 7 de hoy sería otro piropo
+   mañana y lo guardado no querría decir nada.
+   ============================================================ */
+function mezclar(lista, semilla) {
+  const a = lista.slice();
+  let s = semilla;
+  const azar = () => {
+    s = (s * 1664525 + 1013904223) >>> 0;   // generador lineal congruencial
+    return s / 4294967296;
+  };
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(azar() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const ORDEN = mezclar(PIROPOS, 20260922);
+
+/* ============================================================
+   Estado: qué piropos lleva abiertos
+   ============================================================ */
+const CLAVE = 'piropos-abiertos';
+
+function leerAbiertos() {
+  // localStorage puede fallar (modo privado, datos bloqueados). Si falla,
+  // la página funciona igual: simplemente no recuerda entre visitas.
+  try {
+    const guardado = JSON.parse(localStorage.getItem(CLAVE) || '[]');
+    return new Set(Array.isArray(guardado) ? guardado : []);
+  } catch (e) {
+    return new Set();
+  }
+}
+
+function guardarAbiertos(conjunto) {
+  try {
+    localStorage.setItem(CLAVE, JSON.stringify([...conjunto]));
+  } catch (e) { /* da igual, no es crítico */ }
+}
+
+const abiertos = leerAbiertos();
+
+/* ============================================================
+   Dibujar la rejilla
+   ============================================================ */
+const contenedor = document.getElementById('sobres');
+const progreso = document.getElementById('progreso');
+const cierre = document.getElementById('cierre');
+
+const botones = [];
+
+for (let i = 0; i < ORDEN.length; i++) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'sobre';
+  b.textContent = i + 1;
+  b.setAttribute('aria-label', `Piropos número ${i + 1}`);
+  b.addEventListener('click', () => abrir(i));
+  contenedor.appendChild(b);
+  botones.push(b);
+}
+
+function pintar() {
+  botones.forEach((b, i) => b.classList.toggle('abierto', abiertos.has(i)));
+
+  const cuantos = abiertos.size;
+  progreso.textContent = cuantos === ORDEN.length
+    ? 'Los abriste todos 💛'
+    : `Has abierto ${cuantos} de ${ORDEN.length}`;
+
+  if (cuantos === ORDEN.length && cierre.hidden) {
+    cierre.hidden = false;
+    lanzarConfeti(80);
+  }
+}
+
+/* ============================================================
+   Abrir un piropo
+   ============================================================ */
+const modal = document.getElementById('modal');
+const modalNum = document.getElementById('modal-num');
+const modalTexto = document.getElementById('modal-texto');
+const btnAnterior = document.getElementById('anterior');
+const btnSiguiente = document.getElementById('siguiente');
+
+let cual = 0;
+
+function abrir(i) {
+  cual = i;
+  modalNum.textContent = `nº ${i + 1} de ${ORDEN.length}`;
+  modalTexto.textContent = ORDEN[i];
+
+  btnAnterior.disabled = i === 0;
+  btnSiguiente.disabled = i === ORDEN.length - 1;
+
+  modal.hidden = false;
+  document.body.classList.add('con-modal');
+
+  // Verlo cuenta como abrirlo, también si llegó con las flechas
+  if (!abiertos.has(i)) {
+    abiertos.add(i);
+    guardarAbiertos(abiertos);
+    pintar();
+  }
+}
+
+function cerrar() {
+  modal.hidden = true;
+  document.body.classList.remove('con-modal');
+}
+
+document.getElementById('cerrar').addEventListener('click', cerrar);
+btnAnterior.addEventListener('click', () => { if (cual > 0) abrir(cual - 1); });
+btnSiguiente.addEventListener('click', () => { if (cual < ORDEN.length - 1) abrir(cual + 1); });
+
+// Tocar el fondo oscuro también cierra
+modal.addEventListener('click', (e) => { if (e.target === modal) cerrar(); });
+
+document.addEventListener('keydown', (e) => {
+  if (modal.hidden) return;
+  if (e.key === 'Escape') cerrar();
+  if (e.key === 'ArrowLeft' && cual > 0) abrir(cual - 1);
+  if (e.key === 'ArrowRight' && cual < ORDEN.length - 1) abrir(cual + 1);
+});
+
+pintar();
+
+/* ============================================================
+   Confeti
+   ============================================================ */
+function lanzarConfeti(cantidad) {
+  const colores = ['#FFC93C', '#FF6B9D', '#7ED957', '#64B5F6', '#BA68C8', '#FF8A65', '#FFF176'];
+
+  for (let i = 0; i < cantidad; i++) {
+    const c = document.createElement('i');
+    c.className = 'confeti';
+    c.style.left = `${Math.random() * 100}vw`;
+    c.style.background = colores[i % colores.length];
+    c.style.width = `${5 + Math.random() * 6}px`;
+    c.style.height = `${9 + Math.random() * 9}px`;
+    c.style.animationDelay = `${Math.random() * 1.1}s`;
+    c.style.animationDuration = `${2.6 + Math.random() * 2}s`;
+
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 6000);
+  }
+}
+
+/* ============================================================
+   Música
+   ============================================================ */
+const musica = document.getElementById('musica');
+const btnMusica = document.getElementById('btn-musica');
+
+btnMusica.addEventListener('click', () => {
+  if (musica.paused) {
+    musica.play().catch(() => {}); // si el navegador lo bloquea, no pasa nada
+  } else {
+    musica.pause();
+  }
+});
+
+musica.addEventListener('play', () => {
+  btnMusica.classList.add('sonando');
+  btnMusica.textContent = '🔊';
+  btnMusica.setAttribute('aria-label', 'Pausar música');
+});
+
+musica.addEventListener('pause', () => {
+  btnMusica.classList.remove('sonando');
+  btnMusica.textContent = '🎵';
+  btnMusica.setAttribute('aria-label', 'Poner música');
+});
+</script>
+
+</body>
+</html>
